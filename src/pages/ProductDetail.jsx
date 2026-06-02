@@ -65,9 +65,9 @@ export default function ProductDetail() {
     <div className="min-h-screen bg-cream">
       {/* ─── Header ─── */}
       <header className="sticky top-0 z-50 bg-white border-b border-black/[0.06]">
-        <div className="max-w-[1280px] mx-auto px-4 md:px-12 flex items-center justify-between h-[68px] md:h-[80px]">
+        <div className="max-w-[1280px] mx-auto px-4 md:px-12 flex items-center justify-between h-[72px] md:h-[96px]">
           <Link to="/" className="flex items-center">
-            <img src="/assets/logo.jpg" alt="The Little Hood" className="h-14 md:h-16 w-auto object-contain rounded" />
+            <img src="/assets/logo.jpg" alt="The Little Hood" className="h-[64px] md:h-[88px] w-auto object-contain" />
           </Link>
           <Link
             to="/#shop"
@@ -176,7 +176,7 @@ export default function ProductDetail() {
       >
         <div className="max-w-[1280px] mx-auto px-4 md:px-12 flex flex-col md:flex-row items-center justify-between gap-4">
           <Link to="/" className="flex items-center">
-            <img src="/assets/logo.jpg" alt="The Little Hood" className="h-14 md:h-16 w-auto rounded" />
+            <img src="/assets/logo.jpg" alt="The Little Hood" className="h-20 md:h-24 w-auto object-contain rounded-[10px] bg-white p-1.5" />
           </Link>
           <p className="text-white/70 text-[13px] font-body">© 2026 The Little Hood. All rights reserved.</p>
           <a

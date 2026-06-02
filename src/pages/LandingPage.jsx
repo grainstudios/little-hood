@@ -186,7 +186,7 @@ export default function LandingPage() {
       <header
         className={`sticky top-0 z-50 bg-white transition-shadow duration-200 ${scrolled ? 'shadow-[0_2px_5px_rgba(0,0,0,0.06)]' : ''}`}
       >
-        <div className="max-w-[1280px] mx-auto px-4 md:px-12 flex items-center justify-between h-[60px] md:h-[80px]">
+        <div className="max-w-[1280px] mx-auto px-4 md:px-12 flex items-center justify-between h-[72px] md:h-[96px]">
           {/* Mobile hamburger */}
           <button
             className="lg:hidden flex flex-col gap-[5px] p-2 -ml-2"
@@ -200,7 +200,7 @@ export default function LandingPage() {
 
           {/* Logo */}
           <a href="#" className="flex items-center">
-            <img src="/assets/logo.jpg" alt="The Little Hood" className="h-14 md:h-18 w-auto object-contain rounded" />
+            <img src="/assets/logo.jpg" alt="The Little Hood" className="h-[64px] md:h-[88px] w-auto object-contain" />
           </a>
 
           {/* Desktop nav */}
@@ -274,7 +274,7 @@ export default function LandingPage() {
             >
               {/* Menu header */}
               <div className="bg-white flex items-center justify-between px-4 py-4 border-b border-black/[0.06]">
-                <img src="/assets/logo.jpg" alt="The Little Hood" className="h-14 w-auto rounded" />
+                <img src="/assets/logo.jpg" alt="The Little Hood" className="h-16 w-auto object-contain" />
                 <button onClick={() => setMobileMenuOpen(false)} className="p-1" aria-label="Close menu">
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M18 6 6 18M6 6l12 12" /></svg>
                 </button>
@@ -707,7 +707,7 @@ export default function LandingPage() {
             {/* Brand */}
             <div className="col-span-2 md:col-span-1">
               <div className="flex items-center mb-4">
-                <img src="/assets/logo.jpg" alt="The Little Hood" className="h-14 md:h-16 w-auto rounded" />
+                <img src="/assets/logo.jpg" alt="The Little Hood" className="h-20 md:h-24 w-auto object-contain rounded-[10px] bg-white p-1.5" />
               </div>
               <p className="text-white/80 text-[14px] leading-relaxed font-body">
                 Handcrafted 3D printed creations. From figurines to custom prints, we bring your ideas to life.
