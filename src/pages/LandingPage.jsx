@@ -1,60 +1,58 @@
 import { useState, useEffect, useCallback, useRef } from 'react'
+import { Link } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
+import {
+  products,
+  categories as catList,
+  getProductsByCategory,
+  formatPrice,
+  whatsappOrderUrl,
+  WHATSAPP_URL,
+} from '../config/site'
 
-/* ─── data ─── */
-const heroSlides = [
-  { img: 'https://images.unsplash.com/photo-1596464716127-f2a82984de30?w=1600&q=80', alt: '3D Printed Figurines', title: 'Crafted with Precision', subtitle: 'Custom 3D Printed Figurines & Models', cta: 'Shop Now' },
-  { img: 'https://images.unsplash.com/photo-1581092160562-40aa08e78837?w=1600&q=80', alt: '3D Printing Workshop', title: 'From Imagination to Reality', subtitle: 'Premium Quality 3D Prints Delivered to Your Door', cta: 'Explore Collection' },
-  { img: 'https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=1600&q=80', alt: '3D Printed Art', title: 'Art Meets Technology', subtitle: 'Handcrafted 3D Printed Art Pieces & Home Decor', cta: 'View Art' },
-  { img: 'https://images.unsplash.com/photo-1616400619175-5beda3a17896?w=1600&q=80', alt: '3D Printed Objects', title: 'Unlimited Possibilities', subtitle: 'Custom Orders Welcome — Let Us Build Your Vision', cta: 'Get Custom Print' },
-]
+/* ─── derived data from the real catalog ─── */
 
-const videoTiles = [
-  { name: 'Figurines', img: '/assets/product-1.jpg' },
-  { name: 'Miniatures', img: '/assets/product-2.jpg' },
-  { name: 'Custom Prints', img: '/assets/product-3.jpg' },
-  { name: 'Home Decor', img: '/assets/product-4.jpg' },
-  { name: 'Keychains', img: '/assets/product-5.jpg' },
-  { name: 'Action Figures', img: '/assets/product-1.jpg' },
-  { name: 'Art Pieces', img: '/assets/product-2.jpg' },
-  { name: 'Gift Ideas', img: '/assets/product-3.jpg' },
-]
+// Representative image for each category (first product in that category).
+const categoryTiles = catList
+  .map((c) => {
+    const first = products.find((p) => p.category === c.id)
+    return first ? { id: c.id, name: c.name, img: first.images[0] } : null
+  })
+  .filter(Boolean)
 
-const categories = [
-  { name: 'Figurines', img: '/assets/product-1.jpg' },
-  { name: 'Miniatures', img: '/assets/product-2.jpg' },
-  { name: 'Custom Prints', img: '/assets/product-3.jpg' },
-  { name: 'Home Decor', img: '/assets/product-4.jpg' },
-  { name: 'Keychains', img: '/assets/product-5.jpg' },
-  { name: 'Action Figures', img: '/assets/product-1.jpg' },
+// Hero slideshow built from standout real products.
+const heroFeatured = [
+  { id: 'demon-slayer-rengoku', title: 'Crafted with Precision', subtitle: 'Anime Figures & Collectibles' },
+  { id: 'hobbit-lamp', title: 'Light Up Your Space', subtitle: 'Handcrafted 3D Printed Lamps' },
+  { id: 'wall-art-one-piece', title: 'Art Meets Fandom', subtitle: 'Layered Wall Art & Home Decor' },
+  { id: 'spice-organizer-360', title: 'Smart & Functional', subtitle: 'Organizers for Every Room' },
 ]
+const heroSlides = heroFeatured.map((h) => {
+  const p = products.find((x) => x.id === h.id)
+  return { img: p?.images[0], alt: p?.name, title: h.title, subtitle: h.subtitle, cta: 'Shop Now' }
+})
 
-const bestSellers = [
-  { name: 'Dragon Figurine', price: '₹2,499', originalPrice: '₹3,200', img: '/assets/product-1.jpg', badge: 'Best Seller' },
-  { name: 'Anime Character Model', price: '₹3,800', originalPrice: '₹4,500', img: '/assets/product-2.jpg', badge: '' },
-  { name: 'Skull Sculpture', price: '₹1,899', originalPrice: '', img: '/assets/product-3.jpg', badge: 'Popular' },
-  { name: 'Robot Action Figure', price: '₹2,200', originalPrice: '₹2,800', img: '/assets/product-4.jpg', badge: '' },
-  { name: 'Fantasy Creature', price: '₹4,500', originalPrice: '₹5,200', img: '/assets/product-5.jpg', badge: '' },
-  { name: 'Miniature Landscape', price: '₹5,999', originalPrice: '₹7,000', img: '/assets/product-1.jpg', badge: 'Trending' },
-  { name: 'Mech Warrior Model', price: '₹3,200', originalPrice: '', img: '/assets/product-2.jpg', badge: '' },
-  { name: 'Animal Figurine Set', price: '₹1,499', originalPrice: '₹1,800', img: '/assets/product-3.jpg', badge: '' },
-]
+// Circular category tiles above the hero.
+const videoTiles = categoryTiles
 
-const newArrivals = [
-  { name: 'Castle Miniature', price: '₹6,500', img: '/assets/product-4.jpg' },
-  { name: 'Custom Portrait Bust', price: '₹4,200', img: '/assets/product-5.jpg' },
-  { name: 'Spaceship Model', price: '₹3,800', img: '/assets/product-1.jpg' },
-  { name: 'Architectural Model', price: '₹8,999', img: '/assets/product-2.jpg' },
-  { name: 'Vase — Organic Form', price: '₹1,200', img: '/assets/product-3.jpg' },
-  { name: 'Geometric Planter', price: '₹899', img: '/assets/product-4.jpg' },
-  { name: 'Lamp Base — Modern', price: '₹1,599', img: '/assets/product-5.jpg' },
-  { name: 'Desk Organizer', price: '₹749', img: '/assets/product-1.jpg' },
+// Best sellers — curated set of popular, priced products.
+const bestSellerIds = [
+  'demon-slayer-rengoku', 'one-piece-luffy', 'clock-e-mon', 'hobbit-lamp',
+  'spice-organizer-360', 'one-piece-keychain', 'silent-angel-flower-pot', 'minecraft-lamp',
 ]
+const bestSellers = bestSellerIds.map((id) => products.find((p) => p.id === id)).filter(Boolean)
+
+// New arrivals — another curated set.
+const newArrivalIds = [
+  'one-piece-x-pokeball', 'wall-hand-flower-pot', 'mandalorian-controller-holder', 'table-lamp',
+  'makeup-organizer', 'venom-charizard', 'tree-spice-organizer', 'esthetic-flower-pot',
+]
+const newArrivals = newArrivalIds.map((id) => products.find((p) => p.id === id)).filter(Boolean)
 
 const reviews = [
-  { name: 'Arjun M.', rating: 5, text: 'The dragon figurine is absolutely stunning! Detail level is insane for this price. Will order again.', product: 'Dragon Figurine' },
-  { name: 'Priya S.', rating: 5, text: 'Got a custom portrait bust as a gift. The person literally teared up. Amazing quality!', product: 'Custom Portrait Bust' },
-  { name: 'Rahul K.', rating: 5, text: 'Fast delivery, great packaging. The anime model looks exactly like the preview. Highly recommend.', product: 'Anime Character Model' },
+  { name: 'Arjun M.', rating: 5, text: 'The Rengoku figure is absolutely stunning! Detail level is insane for this price. Will order again.', product: 'Demon Slayer — Rengoku' },
+  { name: 'Priya S.', rating: 5, text: 'Ordered the Clock-E-Mon as a gift — the person literally teared up. Amazing quality!', product: 'Clock-E-Mon' },
+  { name: 'Rahul K.', rating: 5, text: 'Fast delivery, great packaging. The hobbit lamp looks exactly like the photos. Highly recommend.', product: 'Hobbit Lamp' },
 ]
 
 /* ─── Ken Burns animation configs per tile ─── */
@@ -89,36 +87,38 @@ const staggerItem = {
 }
 
 /* ─── WhatsApp link ─── */
-const WA_LINK = 'https://wa.me/919876543210?text=Hi!%20I%27m%20interested%20in%20ordering%20from%20The%20Little%20Hood'
+const WA_LINK = `${WHATSAPP_URL}?text=${encodeURIComponent("Hi! I'm interested in ordering from The Little Hood")}`
 
 /* ─── components ─── */
 
 function ProductCard({ product }) {
+  const orderUrl = whatsappOrderUrl(product.name)
   return (
     <motion.div {...staggerItem} className="product-card group">
-      <div className="relative overflow-hidden rounded-[8px] bg-[#f5f5f5] aspect-square mb-3">
-        <img
-          src={product.img}
-          alt={product.name}
-          className="product-card-img w-full h-full object-cover"
-          loading="lazy"
-          onError={(e) => { e.target.src = 'https://images.unsplash.com/photo-1596464716127-f2a82984de30?w=400&q=80' }}
-        />
-        {product.badge && (
-          <span className="absolute top-2 left-2 bg-brown-700 text-white text-[10px] font-semibold uppercase tracking-wider px-3 py-1 rounded-full z-10">
-            {product.badge}
-          </span>
-        )}
-      </div>
-      <h3 className="font-body font-semibold text-[15px] text-body leading-snug mb-1 line-clamp-2">{product.name}</h3>
+      <Link to={`/product/${product.id}`} className="block">
+        <div className="relative overflow-hidden rounded-[8px] bg-[#f5f5f5] aspect-square mb-3">
+          <img
+            src={product.images[0]}
+            alt={product.name}
+            className="product-card-img w-full h-full object-cover"
+            loading="lazy"
+          />
+          {product.badge && (
+            <span className="absolute top-2 left-2 bg-brown-700 text-white text-[10px] font-semibold uppercase tracking-wider px-3 py-1 rounded-full z-10">
+              {product.badge}
+            </span>
+          )}
+        </div>
+        <h3 className="font-body font-semibold text-[15px] text-body leading-snug mb-1 line-clamp-2">{product.name}</h3>
+      </Link>
       <div className="flex items-center gap-2 mb-3">
-        <span className="text-[#000] font-semibold text-[15px]">{product.price}</span>
+        <span className="text-[#000] font-semibold text-[15px]">{formatPrice(product.price)}</span>
         {product.originalPrice && (
           <span className="text-[#000]/40 text-[13px] line-through">{product.originalPrice}</span>
         )}
       </div>
       <a
-        href={WA_LINK}
+        href={orderUrl}
         target="_blank"
         rel="noopener noreferrer"
         className="block w-full text-center py-2.5 rounded-pill border border-brown-500 text-brown-950 bg-beige font-semibold text-[14px] hover:bg-brown-500 hover:text-white transition-colors duration-200"
@@ -129,20 +129,19 @@ function ProductCard({ product }) {
   )
 }
 
-function CategoryCard({ cat, index }) {
+function CategoryCard({ cat }) {
   return (
-    <motion.div {...staggerItem} className="text-center flex-shrink-0">
+    <motion.a {...staggerItem} href={`#cat-${cat.id}`} className="text-center flex-shrink-0 group">
       <div className="relative overflow-hidden rounded-[8px] aspect-square bg-[#f5f5f5] mb-3">
         <img
           src={cat.img}
           alt={cat.name}
-          className="product-card-img w-full h-full object-cover"
+          className="product-card-img w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
           loading="lazy"
-          onError={(e) => { e.target.src = 'https://images.unsplash.com/photo-1596464716127-f2a82984de30?w=400&q=80' }}
         />
       </div>
       <span className="font-body font-medium text-[15px] text-body">{cat.name}</span>
-    </motion.div>
+    </motion.a>
   )
 }
 
@@ -206,10 +205,10 @@ export default function LandingPage() {
 
           {/* Desktop nav */}
           <nav className="hidden lg:flex items-center gap-6">
-            {['Home', 'Figurines', 'Miniatures', 'Custom Prints', 'Home Decor', 'Contact'].map(label => (
+            {[{ label: 'Home', href: '#home' }, { label: 'Action Figures', href: '#cat-action-figures' }, { label: 'Home Decor', href: '#cat-home-decor' }, { label: 'Lamps', href: '#cat-lamps' }, { label: 'Keychains', href: '#cat-keychains' }, { label: 'Shop All', href: '#shop' }, { label: 'Contact', href: '#contact' }].map(({ label, href }) => (
               <a
                 key={label}
-                href={`#${label.toLowerCase().replace(/\s+/g, '-')}`}
+                href={href}
                 className="font-body text-[15px] text-body hover:text-brown-700 transition-colors duration-200"
               >
                 {label}
@@ -282,10 +281,10 @@ export default function LandingPage() {
               </div>
               {/* Menu links */}
               <div className="bg-white px-4 py-3">
-                {['Home', 'Figurines', 'Miniatures', 'Custom Prints', 'Home Decor', 'Contact'].map(label => (
+                {[{ label: 'Home', href: '#home' }, { label: 'Action Figures', href: '#cat-action-figures' }, { label: 'Home Decor', href: '#cat-home-decor' }, { label: 'Lamps', href: '#cat-lamps' }, { label: 'Keychains', href: '#cat-keychains' }, { label: 'Shop All', href: '#shop' }, { label: 'Contact', href: '#contact' }].map(({ label, href }) => (
                   <a
                     key={label}
-                    href={`#${label.toLowerCase().replace(/\s+/g, '-')}`}
+                    href={href}
                     onClick={() => setMobileMenuOpen(false)}
                     className="block py-3 text-[14px] font-medium tracking-wider text-body border-b border-black/[0.04] last:border-0"
                   >
@@ -323,8 +322,8 @@ export default function LandingPage() {
           >
             {videoTiles.map((tile, i) => (
               <motion.a
-                key={tile.name + i}
-                href="#best-sellers"
+                key={tile.id}
+                href={`#cat-${tile.id}`}
                 {...staggerItem}
                 className="flex flex-col items-center flex-shrink-0 snap-start group"
               >
@@ -338,7 +337,6 @@ export default function LandingPage() {
                       className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
                       style={{ animation: kenBurnsAnimations[i % kenBurnsAnimations.length] }}
                       loading="lazy"
-                      onError={(e) => { e.target.src = 'https://images.unsplash.com/photo-1596464716127-f2a82984de30?w=200&q=80' }}
                     />
                   </div>
                 </div>
@@ -368,7 +366,6 @@ export default function LandingPage() {
                 src={heroSlides[heroIndex].img}
                 alt={heroSlides[heroIndex].alt}
                 className="w-full h-full object-cover"
-                onError={(e) => { e.target.src = 'https://images.unsplash.com/photo-1596464716127-f2a82984de30?w=1600&q=80' }}
               />
               {/* Overlay */}
               <div className="absolute inset-0 bg-black/30" />
@@ -427,8 +424,8 @@ export default function LandingPage() {
             Shop by Category
           </motion.h2>
           <motion.div {...staggerContainer} className="grid grid-cols-3 md:grid-cols-6 gap-3 md:gap-5">
-            {categories.map((cat, i) => (
-              <CategoryCard key={cat.name + i} cat={cat} index={i} />
+            {categoryTiles.map((cat) => (
+              <CategoryCard key={cat.id} cat={cat} />
             ))}
           </motion.div>
         </div>
@@ -456,7 +453,7 @@ export default function LandingPage() {
         <div className="max-w-[1280px] mx-auto px-4 md:px-12">
           <motion.div {...fadeUp} className="relative overflow-hidden rounded-[16px]">
             <img
-              src="https://images.unsplash.com/photo-1596464716127-f2a82984de30?w=1200&q=80"
+              src="/assets/products/clock-e-mon/2.webp"
               alt="Custom 3D Printing"
               className="w-full h-[200px] md:h-[320px] object-cover"
             />
@@ -496,6 +493,35 @@ export default function LandingPage() {
               <ProductCard key={p.name + i} product={p} />
             ))}
           </motion.div>
+        </div>
+      </section>
+
+      {/* ─── Full Catalog by Category ─── */}
+      <section id="shop" className="py-8 md:py-16 bg-white">
+        <div className="max-w-[1280px] mx-auto px-4 md:px-12">
+          <motion.h2 {...fadeUp} className="font-heading text-center text-[24px] md:text-[32px] text-dark mb-2">
+            Our Full Collection
+          </motion.h2>
+          <motion.p {...fadeUp} className="text-center text-body/70 text-[15px] mb-8 md:mb-12 font-body">
+            Browse everything we make — order any piece directly on WhatsApp
+          </motion.p>
+
+          {catList.map((cat) => {
+            const items = getProductsByCategory(cat.id)
+            if (!items.length) return null
+            return (
+              <div key={cat.id} id={`cat-${cat.id}`} className="mb-12 md:mb-16 scroll-mt-24">
+                <motion.h3 {...fadeUp} className="font-heading text-[20px] md:text-[26px] text-dark mb-5 md:mb-7 pb-2 border-b border-brown-100">
+                  {cat.name}
+                </motion.h3>
+                <motion.div {...staggerContainer} className="grid grid-cols-2 md:grid-cols-4 gap-x-3 gap-y-6 md:gap-x-5 md:gap-y-8">
+                  {items.map((p) => (
+                    <ProductCard key={p.id} product={p} />
+                  ))}
+                </motion.div>
+              </div>
+            )
+          })}
         </div>
       </section>
 
@@ -704,9 +730,9 @@ export default function LandingPage() {
             <div>
               <h4 className="font-heading text-white font-semibold text-[16px] mb-4">Categories</h4>
               <ul className="space-y-2">
-                {['Figurines', 'Miniatures', 'Home Decor', 'Keychains', 'Action Figures'].map(label => (
+                {[{ label: 'Action Figures', href: '#cat-action-figures' }, { label: 'Home Decor', href: '#cat-home-decor' }, { label: 'Lamps', href: '#cat-lamps' }, { label: 'Keychains', href: '#cat-keychains' }, { label: 'Kitchen', href: '#cat-kitchen' }].map(({ label, href }) => (
                   <li key={label}>
-                    <a href="#" className="text-white/80 text-[14px] font-body hover:text-white transition-colors">{label}</a>
+                    <a href={href} className="text-white/80 text-[14px] font-body hover:text-white transition-colors">{label}</a>
                   </li>
                 ))}
               </ul>

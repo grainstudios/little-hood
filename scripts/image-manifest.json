@@ -1,0 +1,299 @@
+﻿{
+    "iwatch-charging-holder":  [
+                                   "assets/products/iwatch-charging-holder/1.png",
+                                   "assets/products/iwatch-charging-holder/2.png",
+                                   "assets/products/iwatch-charging-holder/3.png"
+                               ],
+    "makeup-organizer":  [
+                             "assets/products/makeup-organizer/1.webp",
+                             "assets/products/makeup-organizer/2.webp"
+                         ],
+    "watch-stand":  [
+                        "assets/products/watch-stand/1.webp",
+                        "assets/products/watch-stand/2.webp",
+                        "assets/products/watch-stand/3.webp"
+                    ],
+    "work-organizer":  [
+                           "assets/products/work-organizer/1.webp",
+                           "assets/products/work-organizer/2.webp",
+                           "assets/products/work-organizer/3.webp"
+                       ],
+    "demon-slayer-rengoku":  [
+                                 "assets/products/demon-slayer-rengoku/1.png",
+                                 "assets/products/demon-slayer-rengoku/2.png",
+                                 "assets/products/demon-slayer-rengoku/3.png",
+                                 "assets/products/demon-slayer-rengoku/4.png",
+                                 "assets/products/demon-slayer-rengoku/5.png"
+                             ],
+    "dragon-ball-goku":  [
+                             "assets/products/dragon-ball-goku/1.png",
+                             "assets/products/dragon-ball-goku/2.webp",
+                             "assets/products/dragon-ball-goku/3.webp"
+                         ],
+    "dragon-ball-pokeball":  [
+                                 "assets/products/dragon-ball-pokeball/1.webp",
+                                 "assets/products/dragon-ball-pokeball/2.webp"
+                             ],
+    "one-piece-luffy-red":  [
+                                "assets/products/one-piece-luffy-red/1.png",
+                                "assets/products/one-piece-luffy-red/2.png",
+                                "assets/products/one-piece-luffy-red/3.png",
+                                "assets/products/one-piece-luffy-red/4.png"
+                            ],
+    "one-piece-den-den-mushi":  [
+                                    "assets/products/one-piece-den-den-mushi/1.jpg",
+                                    "assets/products/one-piece-den-den-mushi/2.png",
+                                    "assets/products/one-piece-den-den-mushi/3.png"
+                                ],
+    "one-piece-luffy":  [
+                            "assets/products/one-piece-luffy/1.png",
+                            "assets/products/one-piece-luffy/2.png",
+                            "assets/products/one-piece-luffy/3.png",
+                            "assets/products/one-piece-luffy/4.png",
+                            "assets/products/one-piece-luffy/5.png"
+                        ],
+    "one-piece-pokeball":  [
+                               "assets/products/one-piece-pokeball/1.png",
+                               "assets/products/one-piece-pokeball/2.png",
+                               "assets/products/one-piece-pokeball/3.png"
+                           ],
+    "one-piece-x-pokeball":  [
+                                 "assets/products/one-piece-x-pokeball/1.png",
+                                 "assets/products/one-piece-x-pokeball/2.png",
+                                 "assets/products/one-piece-x-pokeball/3.png",
+                                 "assets/products/one-piece-x-pokeball/4.png"
+                             ],
+    "charmander-chibbi":  [
+                              "assets/products/charmander-chibbi/1.jpg",
+                              "assets/products/charmander-chibbi/2.jpg",
+                              "assets/products/charmander-chibbi/3.png",
+                              "assets/products/charmander-chibbi/4.png",
+                              "assets/products/charmander-chibbi/5.png"
+                          ],
+    "umbreon-chibbi":  [
+                           "assets/products/umbreon-chibbi/1.png",
+                           "assets/products/umbreon-chibbi/2.png",
+                           "assets/products/umbreon-chibbi/3.jpeg",
+                           "assets/products/umbreon-chibbi/4.jpg",
+                           "assets/products/umbreon-chibbi/5.jpg",
+                           "assets/products/umbreon-chibbi/6.jpg"
+                       ],
+    "umbreon-pokeball":  [
+                             "assets/products/umbreon-pokeball/1.jpg",
+                             "assets/products/umbreon-pokeball/2.jpg",
+                             "assets/products/umbreon-pokeball/3.jpg",
+                             "assets/products/umbreon-pokeball/4.jpg",
+                             "assets/products/umbreon-pokeball/5.png"
+                         ],
+    "venom-charizard":  [
+                            "assets/products/venom-charizard/1.webp",
+                            "assets/products/venom-charizard/2.webp",
+                            "assets/products/venom-charizard/3.webp"
+                        ],
+    "batman":  [
+                   "assets/products/batman/1.png",
+                   "assets/products/batman/2.png"
+               ],
+    "skull-hood":  [
+                       "assets/products/skull-hood/1.gif",
+                       "assets/products/skull-hood/2.webp"
+                   ],
+    "star-wars-darth-vader":  [
+                                  "assets/products/star-wars-darth-vader/1.webp",
+                                  "assets/products/star-wars-darth-vader/2.png"
+                              ],
+    "bathroom-organizer":  [
+                               "assets/products/bathroom-organizer/1.webp",
+                               "assets/products/bathroom-organizer/2.jpeg"
+                           ],
+    "knitted-fridge-magnet":  [
+                                  "assets/products/knitted-fridge-magnet/1.webp",
+                                  "assets/products/knitted-fridge-magnet/2.webp",
+                                  "assets/products/knitted-fridge-magnet/3.webp"
+                              ],
+    "one-piece-fridge-magnet":  [
+                                    "assets/products/one-piece-fridge-magnet/1.png",
+                                    "assets/products/one-piece-fridge-magnet/2.jpg",
+                                    "assets/products/one-piece-fridge-magnet/3.jpg",
+                                    "assets/products/one-piece-fridge-magnet/4.png"
+                                ],
+    "pikachu-splat-magnet":  [
+                                 "assets/products/pikachu-splat-magnet/1.webp",
+                                 "assets/products/pikachu-splat-magnet/2.png"
+                             ],
+    "viking-axe-magnet":  [
+                              "assets/products/viking-axe-magnet/1.jpg",
+                              "assets/products/viking-axe-magnet/2.png"
+                          ],
+    "cubone-joystick-holder":  [
+                                   "assets/products/cubone-joystick-holder/1.webp",
+                                   "assets/products/cubone-joystick-holder/2.webp"
+                               ],
+    "mandalorian-controller-holder":  [
+                                          "assets/products/mandalorian-controller-holder/1.webp",
+                                          "assets/products/mandalorian-controller-holder/2.webp",
+                                          "assets/products/mandalorian-controller-holder/3.webp",
+                                          "assets/products/mandalorian-controller-holder/4.webp",
+                                          "assets/products/mandalorian-controller-holder/5.webp"
+                                      ],
+    "one-piece-law-keycap":  [
+                                 "assets/products/one-piece-law-keycap/1.webp",
+                                 "assets/products/one-piece-law-keycap/2.webp",
+                                 "assets/products/one-piece-law-keycap/3.webp"
+                             ],
+    "fence-flower-pot":  [
+                             "assets/products/fence-flower-pot/1.png",
+                             "assets/products/fence-flower-pot/2.png"
+                         ],
+    "mini-dino":  [
+                      "assets/products/mini-dino/1.jpg",
+                      "assets/products/mini-dino/2.png",
+                      "assets/products/mini-dino/3.png"
+                  ],
+    "pokeball-flower-pot":  [
+                                "assets/products/pokeball-flower-pot/1.jpeg"
+                            ],
+    "sphere-flower-pot":  [
+                              "assets/products/sphere-flower-pot/1.jpg",
+                              "assets/products/sphere-flower-pot/2.jpg",
+                              "assets/products/sphere-flower-pot/3.jpg"
+                          ],
+    "monogram-name-creator":  [
+                                  "assets/products/monogram-name-creator/1.jpg",
+                                  "assets/products/monogram-name-creator/2.webp",
+                                  "assets/products/monogram-name-creator/3.webp",
+                                  "assets/products/monogram-name-creator/4.webp",
+                                  "assets/products/monogram-name-creator/5.webp"
+                              ],
+    "bubble-cube-pot":  [
+                            "assets/products/bubble-cube-pot/1.webp"
+                        ],
+    "clock-e-mon":  [
+                        "assets/products/clock-e-mon/1.jpg",
+                        "assets/products/clock-e-mon/2.webp",
+                        "assets/products/clock-e-mon/3.jpg",
+                        "assets/products/clock-e-mon/4.jpg",
+                        "assets/products/clock-e-mon/5.png",
+                        "assets/products/clock-e-mon/6.png",
+                        "assets/products/clock-e-mon/7.png"
+                    ],
+    "decor-vase":  [
+                       "assets/products/decor-vase/1.webp",
+                       "assets/products/decor-vase/2.webp",
+                       "assets/products/decor-vase/3.webp",
+                       "assets/products/decor-vase/4.webp"
+                   ],
+    "esthetic-flower-pot":  [
+                                "assets/products/esthetic-flower-pot/1.jpg",
+                                "assets/products/esthetic-flower-pot/2.jpg",
+                                "assets/products/esthetic-flower-pot/3.jpg",
+                                "assets/products/esthetic-flower-pot/4.jpg"
+                            ],
+    "hex-shelf":  [
+                      "assets/products/hex-shelf/1.webp",
+                      "assets/products/hex-shelf/2.jpg"
+                  ],
+    "incense-holder":  [
+                           "assets/products/incense-holder/1.jpg",
+                           "assets/products/incense-holder/2.jpg",
+                           "assets/products/incense-holder/3.jpg"
+                       ],
+    "neko-holder":  [
+                        "assets/products/neko-holder/1.webp",
+                        "assets/products/neko-holder/2.webp"
+                    ],
+    "silent-angel-flower-pot":  [
+                                    "assets/products/silent-angel-flower-pot/1.webp",
+                                    "assets/products/silent-angel-flower-pot/2.webp",
+                                    "assets/products/silent-angel-flower-pot/3.webp"
+                                ],
+    "wall-art-one-piece":  [
+                               "assets/products/wall-art-one-piece/1.webp",
+                               "assets/products/wall-art-one-piece/2.webp",
+                               "assets/products/wall-art-one-piece/3.webp",
+                               "assets/products/wall-art-one-piece/4.webp"
+                           ],
+    "wall-art-neko":  [
+                          "assets/products/wall-art-neko/1.jpg"
+                      ],
+    "wall-art-solo-leveling":  [
+                                   "assets/products/wall-art-solo-leveling/1.webp",
+                                   "assets/products/wall-art-solo-leveling/2.webp"
+                               ],
+    "wall-hand-flower-pot":  [
+                                 "assets/products/wall-hand-flower-pot/1.webp",
+                                 "assets/products/wall-hand-flower-pot/2.webp",
+                                 "assets/products/wall-hand-flower-pot/3.webp"
+                             ],
+    "darth-vader-keychain":  [
+                                 "assets/products/darth-vader-keychain/1.webp",
+                                 "assets/products/darth-vader-keychain/2.webp"
+                             ],
+    "minion-keychain":  [
+                            "assets/products/minion-keychain/1.webp",
+                            "assets/products/minion-keychain/2.webp"
+                        ],
+    "one-piece-keychain":  [
+                               "assets/products/one-piece-keychain/1.webp",
+                               "assets/products/one-piece-keychain/2.webp",
+                               "assets/products/one-piece-keychain/3.webp",
+                               "assets/products/one-piece-keychain/4.webp",
+                               "assets/products/one-piece-keychain/5.webp"
+                           ],
+    "pokemon-keychain":  [
+                             "assets/products/pokemon-keychain/1.webp",
+                             "assets/products/pokemon-keychain/2.webp"
+                         ],
+    "spice-organizer-360":  [
+                                "assets/products/spice-organizer-360/1.webp",
+                                "assets/products/spice-organizer-360/2.webp"
+                            ],
+    "spice-organizer":  [
+                            "assets/products/spice-organizer/1.png",
+                            "assets/products/spice-organizer/2.png"
+                        ],
+    "tree-spice-organizer":  [
+                                 "assets/products/tree-spice-organizer/1.webp",
+                                 "assets/products/tree-spice-organizer/2.png"
+                             ],
+    "universal-kitchen-organizer":  [
+                                        "assets/products/universal-kitchen-organizer/1.webp",
+                                        "assets/products/universal-kitchen-organizer/2.webp",
+                                        "assets/products/universal-kitchen-organizer/3.webp",
+                                        "assets/products/universal-kitchen-organizer/4.webp"
+                                    ],
+    "hobbit-lamp":  [
+                        "assets/products/hobbit-lamp/1.jpg",
+                        "assets/products/hobbit-lamp/2.jpg",
+                        "assets/products/hobbit-lamp/3.jpg",
+                        "assets/products/hobbit-lamp/4.jpg",
+                        "assets/products/hobbit-lamp/5.png",
+                        "assets/products/hobbit-lamp/6.png",
+                        "assets/products/hobbit-lamp/7.jpg"
+                    ],
+    "minecraft-lamp":  [
+                           "assets/products/minecraft-lamp/1.webp",
+                           "assets/products/minecraft-lamp/2.webp",
+                           "assets/products/minecraft-lamp/3.webp",
+                           "assets/products/minecraft-lamp/4.jpeg",
+                           "assets/products/minecraft-lamp/5.gif"
+                       ],
+    "mini-home-lamp":  [
+                           "assets/products/mini-home-lamp/1.png",
+                           "assets/products/mini-home-lamp/2.png",
+                           "assets/products/mini-home-lamp/3.png",
+                           "assets/products/mini-home-lamp/4.png",
+                           "assets/products/mini-home-lamp/5.png"
+                       ],
+    "table-lamp":  [
+                       "assets/products/table-lamp/1.webp",
+                       "assets/products/table-lamp/2.webp",
+                       "assets/products/table-lamp/3.webp",
+                       "assets/products/table-lamp/4.webp"
+                   ],
+    "lava-lamp":  [
+                      "assets/products/lava-lamp/1.png",
+                      "assets/products/lava-lamp/2.jpg",
+                      "assets/products/lava-lamp/3.jpg"
+                  ]
+}
