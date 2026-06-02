@@ -1,13 +1,13 @@
 // Site configuration and product catalog for The Little Hood
 // Product data, pricing and images are real customer data.
 
-export const WHATSAPP_NUMBER = '919876543210'
+export const WHATSAPP_NUMBER = '919618125259'
 export const WHATSAPP_URL = `https://wa.me/${WHATSAPP_NUMBER}`
 
 export const siteConfig = {
   name: 'The Little Hood',
   tagline: 'Custom 3D Printed Creations',
-  email: 'studio@thelittlehood.in',
+  email: 'thelittlehood.in@gmail.com',
   phone: '+91 80 4422 1100',
   address: {
     line1: '4th Floor, Precision Heights, Industrial Estate',

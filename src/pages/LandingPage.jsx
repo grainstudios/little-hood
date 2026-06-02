@@ -749,7 +749,7 @@ export default function LandingPage() {
                   </a>
                 </li>
                 <li>
-                  <a href="mailto:hello@thelittlehood.in" className="text-white/80 text-[14px] font-body hover:text-white transition-colors">hello@thelittlehood.in</a>
+                  <a href="mailto:thelittlehood.in@gmail.com" className="text-white/80 text-[14px] font-body hover:text-white transition-colors">thelittlehood.in@gmail.com</a>
                 </li>
                 <li>
                   <a href="https://instagram.com/thelittlehood" target="_blank" rel="noopener noreferrer" className="text-white/80 text-[14px] font-body hover:text-white transition-colors flex items-center gap-2">
