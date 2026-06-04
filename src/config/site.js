@@ -30,7 +30,7 @@ export const categories = [
   { id: 'garden-decor', name: 'Garden Decor' },
   { id: 'gaming', name: 'Gaming' },
   { id: 'accessories', name: 'Accessories' },
-  { id: 'bathroom', name: 'Bathroom' },
+  { id: 'bathroom', name: 'Bathroom Essentials' },
   { id: 'gifting', name: 'Gifting' },
 ]
 
@@ -45,9 +45,9 @@ export const products = [
     images: img('demon-slayer-rengoku', ['1.png', '2.png', '3.png', '4.png', '5.png']),
   },
   {
-    id: 'dragon-ball-goku', name: 'Dragon Ball — Goku', category: 'action-figures',
-    price: 399, description: 'Iconic Dragon Ball Goku figure printed in fine detail and crisp finish. Perfect for desks, shelves and gifting.',
-    images: img('dragon-ball-goku', ['1.png', '2.webp', '3.webp']),
+    id: 'dragon-ball-goku', name: 'Dragon Ball', category: 'action-figures',
+    price: 399, description: 'Iconic Dragon Ball figure printed in fine detail and crisp finish. Perfect for desks, shelves and gifting.',
+    images: img('dragon-ball-goku', ['2.webp', '3.webp']),
   },
   {
     id: 'dragon-ball-pokeball', name: 'Dragon Ball Poké Ball', category: 'action-figures',
@@ -102,7 +102,7 @@ export const products = [
   {
     id: 'batman', name: 'Batman', category: 'action-figures',
     price: 199, description: 'Compact Batman figure printed with clean detail — an affordable collectible for any fan.',
-    images: img('batman', ['1.png', '2.png']),
+    images: img('batman', ['front.png', '1.png', '2.png']),
   },
   {
     id: 'skull-hood', name: 'Skull Hood', category: 'action-figures',
