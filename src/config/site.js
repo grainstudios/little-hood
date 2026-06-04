@@ -14,7 +14,7 @@ export const siteConfig = {
     line2: 'Whitefield, Bengaluru, KA 560066, India',
   },
   social: {
-    instagram: '#',
+    instagram: 'https://www.instagram.com/the_little_hood.inc',
     linkedin: '#',
   },
 }
