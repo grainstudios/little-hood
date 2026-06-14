@@ -1,53 +1,30 @@
-import { useState, useEffect, useCallback, useRef } from 'react'
+import { useState, useEffect, useCallback, useRef, useMemo } from 'react'
 import { Link } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
-import {
-  products,
-  categories as catList,
-  getProductsByCategory,
-  formatPrice,
-  whatsappOrderUrl,
-  WHATSAPP_URL,
-} from '../config/site'
+import { formatPrice, whatsappOrderUrl, WHATSAPP_URL } from '../config/site'
+import { useCatalog } from '../context/CatalogContext'
 
-/* ─── derived data from the real catalog ─── */
+/* ─── curated selections (resolved from the live catalog at render) ─── */
 
-// Representative image for each category (first product in that category).
-const categoryTiles = catList
-  .map((c) => {
-    const first = products.find((p) => p.category === c.id)
-    return first ? { id: c.id, name: c.name, img: first.images[0] } : null
-  })
-  .filter(Boolean)
-
-// Hero slideshow built from standout real products.
+// Hero slideshow — curated standout products + their copy.
 const heroFeatured = [
   { id: 'demon-slayer-rengoku', title: 'Crafted with Precision', subtitle: 'Anime Figures & Collectibles' },
   { id: 'hobbit-lamp', title: 'Light Up Your Space', subtitle: 'Handcrafted 3D Printed Lamps' },
   { id: 'wall-art-one-piece', title: 'Art Meets Fandom', subtitle: 'Layered Wall Art & Home Decor' },
   { id: 'spice-organizer-360', title: 'Smart & Functional', subtitle: 'Organizers for Every Room' },
 ]
-const heroSlides = heroFeatured.map((h) => {
-  const p = products.find((x) => x.id === h.id)
-  return { img: p?.images[0], alt: p?.name, title: h.title, subtitle: h.subtitle, cta: 'Shop Now' }
-})
-
-// Circular category tiles above the hero.
-const videoTiles = categoryTiles
 
 // Best sellers — curated set of popular, priced products.
 const bestSellerIds = [
   'demon-slayer-rengoku', 'one-piece-luffy', 'clock-e-mon', 'hobbit-lamp',
   'spice-organizer-360', 'one-piece-keychain', 'silent-angel-flower-pot', 'minecraft-lamp',
 ]
-const bestSellers = bestSellerIds.map((id) => products.find((p) => p.id === id)).filter(Boolean)
 
 // New arrivals — another curated set.
 const newArrivalIds = [
   'one-piece-x-pokeball', 'wall-hand-flower-pot', 'mandalorian-controller-holder', 'table-lamp',
   'makeup-organizer', 'venom-charizard', 'tree-spice-organizer', 'esthetic-flower-pot',
 ]
-const newArrivals = newArrivalIds.map((id) => products.find((p) => p.id === id)).filter(Boolean)
 
 const reviews = [
   { name: 'Arjun M.', rating: 5, text: 'The Rengoku figure is absolutely stunning! Detail level is insane for this price. Will order again.', product: 'Demon Slayer — Rengoku' },
@@ -146,19 +123,59 @@ function CategoryCard({ cat }) {
 }
 
 export default function LandingPage() {
+  const { products, categories: catList, getProductsByCategory } = useCatalog()
   const [heroIndex, setHeroIndex] = useState(0)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
   const [searchOpen, setSearchOpen] = useState(false)
   const heroInterval = useRef(null)
 
+  /* ─── derived selections from the live catalog ─── */
+  const categoryTiles = useMemo(
+    () =>
+      catList
+        .map((c) => {
+          const first = products.find((p) => p.category === c.id)
+          return first ? { id: c.id, name: c.name, img: first.images[0] } : null
+        })
+        .filter(Boolean),
+    [catList, products],
+  )
+  const videoTiles = categoryTiles
+  const heroSlides = useMemo(
+    () =>
+      heroFeatured
+        .map((h) => {
+          const p = products.find((x) => x.id === h.id)
+          if (!p) return null
+          return { img: p.images[0], alt: p.name, title: h.title, subtitle: h.subtitle, cta: 'Shop Now' }
+        })
+        .filter(Boolean),
+    [products],
+  )
+  const bestSellers = useMemo(
+    () => bestSellerIds.map((id) => products.find((p) => p.id === id)).filter(Boolean),
+    [products],
+  )
+  const newArrivals = useMemo(
+    () => newArrivalIds.map((id) => products.find((p) => p.id === id)).filter(Boolean),
+    [products],
+  )
+
+  // Current hero slide count, kept in a ref so the auto-advance interval never
+  // closes over a stale length when the catalog loads.
+  const currentHero =
+    heroSlides[heroIndex] || heroSlides[0] || { img: '', alt: '', title: '', subtitle: '', cta: 'Shop Now' }
+
   // Hero auto-slide
   useEffect(() => {
+    const len = heroSlides.length
+    if (len <= 1) return undefined
     heroInterval.current = setInterval(() => {
-      setHeroIndex(i => (i + 1) % heroSlides.length)
+      setHeroIndex((i) => (i + 1) % len)
     }, 5000)
     return () => clearInterval(heroInterval.current)
-  }, [])
+  }, [heroSlides.length])
 
   // Sticky header shadow
   useEffect(() => {
@@ -167,13 +184,17 @@ export default function LandingPage() {
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
-  const goSlide = useCallback((i) => {
-    setHeroIndex(i)
-    clearInterval(heroInterval.current)
-    heroInterval.current = setInterval(() => {
-      setHeroIndex(idx => (idx + 1) % heroSlides.length)
-    }, 5000)
-  }, [])
+  const goSlide = useCallback(
+    (i) => {
+      const len = heroSlides.length
+      setHeroIndex(i)
+      clearInterval(heroInterval.current)
+      heroInterval.current = setInterval(() => {
+        setHeroIndex((idx) => (len ? (idx + 1) % len : 0))
+      }, 5000)
+    },
+    [heroSlides.length],
+  )
 
   return (
     <div className="min-h-screen bg-white">
@@ -363,8 +384,8 @@ export default function LandingPage() {
               className="absolute inset-0"
             >
               <img
-                src={heroSlides[heroIndex].img}
-                alt={heroSlides[heroIndex].alt}
+                src={currentHero.img}
+                alt={currentHero.alt}
                 className="w-full h-full object-cover"
               />
               {/* Overlay */}
@@ -384,16 +405,16 @@ export default function LandingPage() {
                 className="text-center text-white px-4 max-w-[600px]"
               >
                 <p className="text-[13px] md:text-[15px] uppercase tracking-[3px] mb-3 font-body opacity-90">
-                  {heroSlides[heroIndex].subtitle}
+                  {currentHero.subtitle}
                 </p>
                 <h1 className="font-heading text-[36px] md:text-[56px] lg:text-[64px] font-bold leading-tight mb-6">
-                  {heroSlides[heroIndex].title}
+                  {currentHero.title}
                 </h1>
                 <a
                   href="#best-sellers"
                   className="inline-block px-8 py-3 bg-white text-body font-semibold text-[15px] rounded-pill hover:bg-brown-700 hover:text-white transition-colors duration-200"
                 >
-                  {heroSlides[heroIndex].cta}
+                  {currentHero.cta}
                 </a>
               </motion.div>
             </AnimatePresence>

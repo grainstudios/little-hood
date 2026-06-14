@@ -23,3 +23,9 @@ dist-ssr
 *.sln
 *.sw?
 .vercel
+
+# Sanity / secrets
+.env
+studio/node_modules
+studio/dist
+studio/.sanity

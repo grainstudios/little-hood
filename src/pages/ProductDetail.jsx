@@ -1,14 +1,8 @@
 import { useState, useEffect } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import {
-  getProductById,
-  getProductsByCategory,
-  categories,
-  formatPrice,
-  whatsappOrderUrl,
-  WHATSAPP_URL,
-} from '../config/site'
+import { formatPrice, whatsappOrderUrl, WHATSAPP_URL } from '../config/site'
+import { useCatalog } from '../context/CatalogContext'
 
 const fadeUp = {
   initial: { opacity: 0, y: 24 },
@@ -37,6 +31,7 @@ function RelatedCard({ product }) {
 
 export default function ProductDetail() {
   const { id } = useParams()
+  const { getProductById, getProductsByCategory, categories, loading } = useCatalog()
   const product = getProductById(id)
   const [activeImg, setActiveImg] = useState(0)
 
@@ -44,6 +39,16 @@ export default function ProductDetail() {
     window.scrollTo(0, 0)
     setActiveImg(0)
   }, [id])
+
+  // While the live catalog is still loading, show a spinner instead of
+  // flashing "not found" for a product that exists in Sanity.
+  if (!product && loading) {
+    return (
+      <div className="min-h-screen bg-cream flex items-center justify-center px-4">
+        <div className="w-9 h-9 rounded-full border-2 border-brown-200 border-t-brown-700 animate-spin" />
+      </div>
+    )
+  }
 
   if (!product) {
     return (

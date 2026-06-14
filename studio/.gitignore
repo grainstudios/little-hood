@@ -1,0 +1,4 @@
+# Sanity Studio build output / local
+dist
+.sanity
+node_modules
