@@ -182,34 +182,38 @@ function CustomOrderMascot() {
   )
 }
 
-/* ─── Attention arrow — sits at the button's top-right and points into it ─── */
+/* ─── Attention arrow — anchored directly to the button (not the page), so it
+   always points exactly at it no matter the screen size. The caption is
+   plain text (no pill/shadow) so it reads as an instruction about the
+   button, not as a clickable element itself. ─── */
 function CustomOrderArrow() {
   return (
     <motion.div
       aria-hidden="true"
-      initial={{ opacity: 0, scale: 0.7, y: -8 }}
+      initial={{ opacity: 0, scale: 0.7, y: -10 }}
       whileInView={{ opacity: 1, scale: 1, y: 0 }}
       viewport={{ once: true, margin: '-80px' }}
-      transition={{ type: 'spring', stiffness: 220, damping: 14, delay: 0.25 }}
-      className="hidden md:flex flex-col items-end absolute -top-[54px] right-0 z-20 pointer-events-none"
+      transition={{ type: 'spring', stiffness: 220, damping: 14, delay: 0.3 }}
+      className="hidden md:flex flex-col items-end absolute right-0 bottom-full mb-2 z-20 pointer-events-none"
     >
-      {/* wobbling label */}
+      {/* plain caption — no background/pill, so it doesn't look clickable */}
       <motion.span
-        animate={{ rotate: [-5, 4, -5] }}
+        animate={{ rotate: [-4, 3, -4] }}
         transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
-        className="mb-1 origin-bottom bg-white text-brown-800 text-[12px] font-extrabold px-3 py-1 rounded-full shadow-lg whitespace-nowrap"
+        className="mb-1 origin-bottom italic font-heading text-white text-[14px] font-semibold whitespace-nowrap"
+        style={{ textShadow: '0 1px 4px rgba(0,0,0,0.55)' }}
       >
-        Click here!
+        Tap the button!
       </motion.span>
-      {/* curved arrow with a flowing dash + auto-oriented head */}
-      <svg width="76" height="46" viewBox="0 0 76 46" fill="none" className="overflow-visible mr-3">
+      {/* short curve landing right on the button's top edge */}
+      <svg width="84" height="52" viewBox="0 0 84 52" fill="none" className="overflow-visible">
         <defs>
           <marker id="coArrowHead" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="5.5" markerHeight="5.5" orient="auto">
             <path d="M0 0 L10 5 L0 10 z" fill="#fff" />
           </marker>
         </defs>
         <motion.path
-          d="M68 4 C 74 20, 46 20, 30 30 C 22 34, 16 38, 10 42"
+          d="M76 4 C 82 20, 58 26, 40 34 C 28 39, 18 43, 10 48"
           stroke="#fff"
           strokeWidth="3"
           strokeLinecap="round"
@@ -618,7 +622,7 @@ export default function LandingPage() {
                 <p className="text-[14px] md:text-[16px] opacity-90 mb-4 md:mb-6 font-body">
                   Have a unique idea? We'll bring it to life. Send us your design and we'll 3D print it for you.
                 </p>
-                <div className="flex items-center gap-3">
+                <div className="flex items-center gap-3 mt-0 md:mt-16">
                   <div className="relative inline-flex">
                     {/* pulsing attention ring behind the button */}
                     <motion.span
@@ -635,7 +639,7 @@ export default function LandingPage() {
                     >
                       Get a Quote
                     </a>
-                    {/* Top-right arrow pointing down into the button */}
+                    {/* Arrow anchored to the button itself — always points exactly at it */}
                     <CustomOrderArrow />
                   </div>
                   {/* Cartoon mascot that waves next to the button */}
