@@ -6,7 +6,8 @@ import { useCatalog } from '../context/CatalogContext'
 
 /* ─── curated selections (resolved from the live catalog at render) ─── */
 
-// Hero slideshow — curated standout products + their copy.
+// Hero slideshow FALLBACK — used only when no hero slides exist in Sanity.
+// Manage the live slideshow (upload custom photos + text) in the Studio instead.
 const heroFeatured = [
   { id: 'demon-slayer-rengoku', title: 'Crafted with Precision', subtitle: 'Anime Figures & Collectibles' },
   { id: 'hobbit-lamp', title: 'Light Up Your Space', subtitle: 'Handcrafted 3D Printed Lamps' },
@@ -14,13 +15,15 @@ const heroFeatured = [
   { id: 'spice-organizer-360', title: 'Smart & Functional', subtitle: 'Organizers for Every Room' },
 ]
 
-// Best sellers — curated set of popular, priced products.
+// Best sellers FALLBACK — used only when no products are flagged as
+// "Best seller" in Sanity. Toggle the flag on products in the Studio instead.
 const bestSellerIds = [
   'demon-slayer-rengoku', 'one-piece-luffy', 'clock-e-mon', 'hobbit-lamp',
   'spice-organizer-360', 'one-piece-keychain', 'silent-angel-flower-pot', 'minecraft-lamp',
 ]
 
-// New arrivals — another curated set.
+// New arrivals FALLBACK — used only when the catalog has no creation dates
+// (offline/built-in mode). Live new arrivals are derived from Sanity _createdAt.
 const newArrivalIds = [
   'one-piece-x-pokeball', 'wall-hand-flower-pot', 'mandalorian-controller-holder', 'table-lamp',
   'makeup-organizer', 'venom-charizard', 'tree-spice-organizer', 'esthetic-flower-pot',
@@ -122,8 +125,107 @@ function CategoryCard({ cat }) {
   )
 }
 
+/* ─── Custom-order mascot — springy character that waves & blinks ─── */
+function CustomOrderMascot() {
+  return (
+    <motion.div
+      aria-hidden="true"
+      initial={{ scale: 0, opacity: 0, y: 18, rotate: -14 }}
+      whileInView={{ scale: 1, opacity: 1, y: 0, rotate: 0 }}
+      viewport={{ once: true, margin: '-80px' }}
+      transition={{ type: 'spring', stiffness: 260, damping: 11, delay: 0.15 }}
+      className="relative flex-shrink-0 select-none"
+    >
+      {/* idle bob + subtle wiggle */}
+      <motion.div
+        animate={{ y: [0, -5, 0], rotate: [-3, 3, -3] }}
+        transition={{ duration: 2.2, repeat: Infinity, ease: 'easeInOut' }}
+      >
+        <svg width="56" height="60" viewBox="0 0 58 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+          {/* ground shadow */}
+          <ellipse cx="31" cy="55" rx="12.5" ry="2.5" fill="#000" opacity="0.15" />
+          {/* left arm + hand pointing at the button */}
+          <path d="M15 33 H5.5" stroke="#fff" strokeWidth="3.4" strokeLinecap="round" />
+          <circle cx="5" cy="33" r="3.3" fill="#fff" />
+          {/* right arm — waving */}
+          <motion.g
+            style={{ transformBox: 'fill-box', transformOrigin: 'left center' }}
+            animate={{ rotate: [0, 22, 0, 22, 0] }}
+            transition={{ duration: 2.2, repeat: Infinity, ease: 'easeInOut' }}
+          >
+            <path d="M45 31 L53 26" stroke="#fff" strokeWidth="3.4" strokeLinecap="round" />
+          </motion.g>
+          {/* body */}
+          <path d="M14 25 C14 12.5 22.7 6 30 6 C37.3 6 46 12.5 46 25 L46 39 C46 48.5 39.4 53 30 53 C20.6 53 14 48.5 14 39 Z" fill="#fff" stroke="#8b543d" strokeWidth="2.6" />
+          {/* antenna */}
+          <line x1="30" y1="6" x2="30" y2="1.6" stroke="#8b543d" strokeWidth="2.2" strokeLinecap="round" />
+          <circle cx="30" cy="1.6" r="1.9" fill="#bd8556" />
+          {/* cheeks */}
+          <circle cx="21.5" cy="35" r="2.7" fill="#f3a39b" opacity="0.75" />
+          <circle cx="38.5" cy="35" r="2.7" fill="#f3a39b" opacity="0.75" />
+          {/* eyes — blinking */}
+          <motion.g
+            style={{ transformBox: 'fill-box', transformOrigin: 'center' }}
+            animate={{ scaleY: [1, 1, 0.12, 1, 1] }}
+            transition={{ duration: 3.4, repeat: Infinity, times: [0, 0.85, 0.9, 0.95, 1], ease: 'easeInOut' }}
+          >
+            <circle cx="25" cy="29" r="3.2" fill="#3a2a20" />
+            <circle cx="35" cy="29" r="3.2" fill="#3a2a20" />
+            <circle cx="26.1" cy="27.9" r="1.05" fill="#fff" />
+            <circle cx="36.1" cy="27.9" r="1.05" fill="#fff" />
+          </motion.g>
+          {/* smile */}
+          <path d="M25.5 37 Q30 41 34.5 37" stroke="#3a2a20" strokeWidth="2" strokeLinecap="round" fill="none" />
+        </svg>
+      </motion.div>
+    </motion.div>
+  )
+}
+
+/* ─── Attention arrow — sits at the button's top-right and points into it ─── */
+function CustomOrderArrow() {
+  return (
+    <motion.div
+      aria-hidden="true"
+      initial={{ opacity: 0, scale: 0.7, y: -8 }}
+      whileInView={{ opacity: 1, scale: 1, y: 0 }}
+      viewport={{ once: true, margin: '-80px' }}
+      transition={{ type: 'spring', stiffness: 220, damping: 14, delay: 0.25 }}
+      className="hidden md:flex flex-col items-end absolute -top-[54px] right-0 z-20 pointer-events-none"
+    >
+      {/* wobbling label */}
+      <motion.span
+        animate={{ rotate: [-5, 4, -5] }}
+        transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
+        className="mb-1 origin-bottom bg-white text-brown-800 text-[12px] font-extrabold px-3 py-1 rounded-full shadow-lg whitespace-nowrap"
+      >
+        Click here!
+      </motion.span>
+      {/* curved arrow with a flowing dash + auto-oriented head */}
+      <svg width="76" height="46" viewBox="0 0 76 46" fill="none" className="overflow-visible mr-3">
+        <defs>
+          <marker id="coArrowHead" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="5.5" markerHeight="5.5" orient="auto">
+            <path d="M0 0 L10 5 L0 10 z" fill="#fff" />
+          </marker>
+        </defs>
+        <motion.path
+          d="M68 4 C 74 20, 46 20, 30 30 C 22 34, 16 38, 10 42"
+          stroke="#fff"
+          strokeWidth="3"
+          strokeLinecap="round"
+          fill="none"
+          markerEnd="url(#coArrowHead)"
+          strokeDasharray="8 10"
+          animate={{ strokeDashoffset: [0, -36] }}
+          transition={{ duration: 0.9, repeat: Infinity, ease: 'linear' }}
+        />
+      </svg>
+    </motion.div>
+  )
+}
+
 export default function LandingPage() {
-  const { products, categories: catList, getProductsByCategory } = useCatalog()
+  const { products, categories: catList, getProductsByCategory, heroSlides: cmsHeroSlides, logoUrl } = useCatalog()
   const [heroIndex, setHeroIndex] = useState(0)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
@@ -142,30 +244,60 @@ export default function LandingPage() {
     [catList, products],
   )
   const videoTiles = categoryTiles
-  const heroSlides = useMemo(
-    () =>
-      heroFeatured
-        .map((h) => {
-          const p = products.find((x) => x.id === h.id)
-          if (!p) return null
-          return { img: p.images[0], alt: p.name, title: h.title, subtitle: h.subtitle, cta: 'Shop Now' }
-        })
-        .filter(Boolean),
-    [products],
-  )
-  const bestSellers = useMemo(
-    () => bestSellerIds.map((id) => products.find((p) => p.id === id)).filter(Boolean),
-    [products],
-  )
-  const newArrivals = useMemo(
-    () => newArrivalIds.map((id) => products.find((p) => p.id === id)).filter(Boolean),
-    [products],
-  )
+  // Hero slideshow — prefer admin-managed slides from Sanity (custom photo +
+  // headline uploaded in the Studio). Falls back to curated products so the
+  // hero is never blank before/without any CMS slides.
+  const heroSlides = useMemo(() => {
+    if (cmsHeroSlides && cmsHeroSlides.length) {
+      return cmsHeroSlides.map((s) => ({
+        img: s.img,
+        alt: s.title || 'The Little Hood',
+        title: s.title,
+        subtitle: s.subtitle,
+        cta: s.ctaLabel || 'Shop Now',
+        link: s.ctaLink || '#best-sellers',
+      }))
+    }
+    return heroFeatured
+      .map((h) => {
+        const p = products.find((x) => x.id === h.id)
+        if (!p) return null
+        return {
+          img: p.images[0],
+          alt: p.name,
+          title: h.title,
+          subtitle: h.subtitle,
+          cta: 'Shop Now',
+          link: '#best-sellers',
+        }
+      })
+      .filter(Boolean)
+  }, [cmsHeroSlides, products])
+  // Best sellers — products flagged in Sanity (bestSeller toggle). Falls back
+  // to a curated set when nothing is flagged yet.
+  const bestSellers = useMemo(() => {
+    const flagged = products.filter((p) => p.bestSeller)
+    if (flagged.length) return flagged
+    return bestSellerIds.map((id) => products.find((p) => p.id === id)).filter(Boolean)
+  }, [products])
+  // New arrivals — newest products first, driven automatically by their Sanity
+  // creation date. Falls back to a curated set when no dates are available
+  // (e.g. the built-in offline catalog). _createdAt is ISO-8601, so a plain
+  // string compare sorts chronologically. Computed inline (cheap) rather than
+  // memoized, since the sort keeps it out of the compiler's memoization path.
+  const datedProducts = products.filter((p) => p.createdAt)
+  const newArrivals = datedProducts.length
+    ? datedProducts
+        .slice()
+        .sort((a, b) => (a.createdAt < b.createdAt ? 1 : a.createdAt > b.createdAt ? -1 : 0))
+        .slice(0, 8)
+    : newArrivalIds.map((id) => products.find((p) => p.id === id)).filter(Boolean)
 
   // Current hero slide count, kept in a ref so the auto-advance interval never
   // closes over a stale length when the catalog loads.
   const currentHero =
-    heroSlides[heroIndex] || heroSlides[0] || { img: '', alt: '', title: '', subtitle: '', cta: 'Shop Now' }
+    heroSlides[heroIndex] ||
+    heroSlides[0] || { img: '', alt: '', title: '', subtitle: '', cta: 'Shop Now', link: '#best-sellers' }
 
   // Hero auto-slide
   useEffect(() => {
@@ -221,7 +353,7 @@ export default function LandingPage() {
 
           {/* Logo */}
           <a href="#" className="flex items-center">
-            <img src="/assets/logo.jpg" alt="The Little Hood" className="h-[64px] md:h-[88px] w-auto object-contain" />
+            <img src={logoUrl} alt="The Little Hood" className="h-[64px] md:h-[88px] w-auto object-contain" />
           </a>
 
           {/* Desktop nav */}
@@ -295,7 +427,7 @@ export default function LandingPage() {
             >
               {/* Menu header */}
               <div className="bg-white flex items-center justify-between px-4 py-4 border-b border-black/[0.06]">
-                <img src="/assets/logo.jpg" alt="The Little Hood" className="h-16 w-auto object-contain" />
+                <img src={logoUrl} alt="The Little Hood" className="h-16 w-auto object-contain" />
                 <button onClick={() => setMobileMenuOpen(false)} className="p-1" aria-label="Close menu">
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M18 6 6 18M6 6l12 12" /></svg>
                 </button>
@@ -411,7 +543,7 @@ export default function LandingPage() {
                   {currentHero.title}
                 </h1>
                 <a
-                  href="#best-sellers"
+                  href={currentHero.link || '#best-sellers'}
                   className="inline-block px-8 py-3 bg-white text-body font-semibold text-[15px] rounded-pill hover:bg-brown-700 hover:text-white transition-colors duration-200"
                 >
                   {currentHero.cta}
@@ -486,14 +618,29 @@ export default function LandingPage() {
                 <p className="text-[14px] md:text-[16px] opacity-90 mb-4 md:mb-6 font-body">
                   Have a unique idea? We'll bring it to life. Send us your design and we'll 3D print it for you.
                 </p>
-                <a
-                  href={WA_LINK}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-block px-6 py-2.5 bg-white text-brown-950 font-semibold text-[14px] rounded-pill hover:bg-brown-50 transition-colors"
-                >
-                  Get a Quote
-                </a>
+                <div className="flex items-center gap-3">
+                  <div className="relative inline-flex">
+                    {/* pulsing attention ring behind the button */}
+                    <motion.span
+                      aria-hidden="true"
+                      className="absolute inset-0 rounded-pill bg-white/40"
+                      animate={{ scale: [1, 1.35, 1], opacity: [0.6, 0, 0.6] }}
+                      transition={{ duration: 1.9, repeat: Infinity, ease: 'easeOut' }}
+                    />
+                    <a
+                      href={WA_LINK}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="relative inline-block px-6 py-2.5 bg-white text-brown-950 font-semibold text-[14px] rounded-pill hover:bg-brown-50 transition-colors"
+                    >
+                      Get a Quote
+                    </a>
+                    {/* Top-right arrow pointing down into the button */}
+                    <CustomOrderArrow />
+                  </div>
+                  {/* Cartoon mascot that waves next to the button */}
+                  <CustomOrderMascot />
+                </div>
               </div>
             </div>
           </motion.div>
@@ -728,7 +875,7 @@ export default function LandingPage() {
             {/* Brand */}
             <div className="col-span-2 md:col-span-1">
               <div className="flex items-center mb-4">
-                <img src="/assets/logo.jpg" alt="The Little Hood" className="h-20 md:h-24 w-auto object-contain rounded-[10px] bg-white p-1.5" />
+                <img src={logoUrl} alt="The Little Hood" className="h-20 md:h-24 w-auto object-contain rounded-[10px] bg-white p-1.5" />
               </div>
               <p className="text-white/80 text-[14px] leading-relaxed font-body">
                 Handcrafted 3D printed creations. From figurines to custom prints, we bring your ideas to life.

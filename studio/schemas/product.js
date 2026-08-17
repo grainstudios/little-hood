@@ -50,6 +50,22 @@ export default defineType({
       validation: (rule) => rule.min(1).error('Add at least one image.'),
     }),
     defineField({
+      name: 'video',
+      title: 'Video (optional)',
+      type: 'file',
+      description:
+        'Upload a short product video (MP4/WebM). It appears alongside the photos on the product page.',
+      options: { accept: 'video/*' },
+    }),
+    defineField({
+      name: 'bestSeller',
+      title: 'Best seller',
+      type: 'boolean',
+      description:
+        'Turn on to feature this product in the "Best Sellers" section on the home page.',
+      initialValue: false,
+    }),
+    defineField({
       name: 'order',
       title: 'Display order',
       type: 'number',

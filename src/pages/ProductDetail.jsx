@@ -31,13 +31,13 @@ function RelatedCard({ product }) {
 
 export default function ProductDetail() {
   const { id } = useParams()
-  const { getProductById, getProductsByCategory, categories, loading } = useCatalog()
+  const { getProductById, getProductsByCategory, categories, loading, logoUrl } = useCatalog()
   const product = getProductById(id)
-  const [activeImg, setActiveImg] = useState(0)
+  const [activeMedia, setActiveMedia] = useState(0)
 
   useEffect(() => {
     window.scrollTo(0, 0)
-    setActiveImg(0)
+    setActiveMedia(0)
   }, [id])
 
   // While the live catalog is still loading, show a spinner instead of
@@ -66,13 +66,20 @@ export default function ProductDetail() {
   const related = getProductsByCategory(product.category).filter((p) => p.id !== product.id).slice(0, 4)
   const orderUrl = whatsappOrderUrl(product.name)
 
+  // Combined media list — optional product video first, then the photos.
+  const media = [
+    ...(product.video ? [{ type: 'video', src: product.video, poster: product.images[0] || '' }] : []),
+    ...product.images.map((src) => ({ type: 'image', src })),
+  ]
+  const active = media[activeMedia] || media[0] || { type: 'image', src: '' }
+
   return (
     <div className="min-h-screen bg-cream">
       {/* ─── Header ─── */}
       <header className="sticky top-0 z-50 bg-white border-b border-black/[0.06]">
         <div className="max-w-[1280px] mx-auto px-4 md:px-12 flex items-center justify-between h-[72px] md:h-[96px]">
           <Link to="/" className="flex items-center">
-            <img src="/assets/logo.jpg" alt="The Little Hood" className="h-[64px] md:h-[88px] w-auto object-contain" />
+            <img src={logoUrl} alt="The Little Hood" className="h-[64px] md:h-[88px] w-auto object-contain" />
           </Link>
           <Link
             to="/#shop"
@@ -101,24 +108,49 @@ export default function ProductDetail() {
           {/* Gallery */}
           <motion.div {...fadeUp}>
             <div className="relative overflow-hidden rounded-[14px] bg-white aspect-square mb-3 border border-black/[0.05]">
-              <img
-                src={product.images[activeImg]}
-                alt={product.name}
-                className="w-full h-full object-cover"
-              />
+              {active.type === 'video' ? (
+                <video
+                  key={active.src}
+                  src={active.src}
+                  poster={active.poster}
+                  controls
+                  playsInline
+                  preload="metadata"
+                  className="w-full h-full object-cover bg-black"
+                />
+              ) : (
+                <img
+                  src={active.src}
+                  alt={product.name}
+                  className="w-full h-full object-cover"
+                />
+              )}
             </div>
-            {product.images.length > 1 && (
+            {media.length > 1 && (
               <div className="flex gap-2.5 flex-wrap">
-                {product.images.map((src, i) => (
+                {media.map((m, i) => (
                   <button
-                    key={src}
-                    onClick={() => setActiveImg(i)}
-                    className={`w-[64px] h-[64px] md:w-[78px] md:h-[78px] rounded-[8px] overflow-hidden border-2 transition-colors ${
-                      i === activeImg ? 'border-brown-700' : 'border-transparent hover:border-brown-300'
+                    key={m.src + i}
+                    onClick={() => setActiveMedia(i)}
+                    className={`relative w-[64px] h-[64px] md:w-[78px] md:h-[78px] rounded-[8px] overflow-hidden border-2 transition-colors ${
+                      i === activeMedia ? 'border-brown-700' : 'border-transparent hover:border-brown-300'
                     }`}
-                    aria-label={`View image ${i + 1}`}
+                    aria-label={m.type === 'video' ? 'Play product video' : `View image ${i + 1}`}
                   >
-                    <img src={src} alt={`${product.name} ${i + 1}`} className="w-full h-full object-cover" loading="lazy" />
+                    {m.type === 'video' ? (
+                      <>
+                        {m.poster ? (
+                          <img src={m.poster} alt={`${product.name} video`} className="w-full h-full object-cover" loading="lazy" />
+                        ) : (
+                          <span className="block w-full h-full bg-black" />
+                        )}
+                        <span className="absolute inset-0 flex items-center justify-center bg-black/30">
+                          <svg className="w-6 h-6 text-white" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z" /></svg>
+                        </span>
+                      </>
+                    ) : (
+                      <img src={m.src} alt={`${product.name} ${i + 1}`} className="w-full h-full object-cover" loading="lazy" />
+                    )}
                   </button>
                 ))}
               </div>
@@ -181,7 +213,7 @@ export default function ProductDetail() {
       >
         <div className="max-w-[1280px] mx-auto px-4 md:px-12 flex flex-col md:flex-row items-center justify-between gap-4">
           <Link to="/" className="flex items-center">
-            <img src="/assets/logo.jpg" alt="The Little Hood" className="h-20 md:h-24 w-auto object-contain rounded-[10px] bg-white p-1.5" />
+            <img src={logoUrl} alt="The Little Hood" className="h-20 md:h-24 w-auto object-contain rounded-[10px] bg-white p-1.5" />
           </Link>
           <p className="text-white/70 text-[13px] font-body">© 2026 The Little Hood. All rights reserved.</p>
           <a

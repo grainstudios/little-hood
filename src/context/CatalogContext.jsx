@@ -12,19 +12,23 @@ const CatalogContext = createContext(null)
 export function CatalogProvider({ children }) {
   const [products, setProducts] = useState(fallbackProducts)
   const [categories, setCategories] = useState(fallbackCategories)
+  const [heroSlides, setHeroSlides] = useState([])
+  const [logoUrl, setLogoUrl] = useState('/assets/logo.jpg')
   const [loading, setLoading] = useState(true)
   const [source, setSource] = useState('fallback')
 
   useEffect(() => {
     let active = true
     fetchCatalog()
-      .then(({ products: p, categories: c }) => {
+      .then(({ products: p, categories: c, heroSlides: h, logoUrl: l }) => {
         if (!active) return
         if (p && p.length) {
           setProducts(p)
           setSource('sanity')
         }
         if (c && c.length) setCategories(c)
+        if (h && h.length) setHeroSlides(h)
+        if (l) setLogoUrl(l)
       })
       .catch((err) => {
         // Keep the fallback catalog; just log for debugging.
@@ -42,13 +46,15 @@ export function CatalogProvider({ children }) {
     () => ({
       products,
       categories,
+      heroSlides,
+      logoUrl,
       loading,
       source,
       getProductById: (id) => products.find((p) => p.id === id),
       getProductsByCategory: (categoryId) =>
         products.filter((p) => p.category === categoryId),
     }),
-    [products, categories, loading, source],
+    [products, categories, heroSlides, logoUrl, loading, source],
   )
 
   return <CatalogContext.Provider value={value}>{children}</CatalogContext.Provider>

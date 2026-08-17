@@ -29,7 +29,10 @@ const PRODUCTS_QUERY = `*[_type == "product" && !(_id in path("drafts.**")) && a
     "categoryName": category->title,
     price,
     description,
-    images
+    images,
+    "video": video.asset->url,
+    bestSeller,
+    "createdAt": _createdAt
   }`
 
 const CATEGORIES_QUERY = `*[_type == "category" && !(_id in path("drafts.**"))]
@@ -37,6 +40,20 @@ const CATEGORIES_QUERY = `*[_type == "category" && !(_id in path("drafts.**"))]
     "id": slug.current,
     "name": title
   }`
+
+// GROQ: visible hero slides ordered manually. Powers the landing-page slideshow.
+const HERO_SLIDES_QUERY = `*[_type == "heroSlide" && !(_id in path("drafts.**")) && active != false]
+  | order(order asc, _createdAt asc) {
+    "id": _id,
+    title,
+    subtitle,
+    ctaLabel,
+    ctaLink,
+    image
+  }`
+
+// GROQ: global site settings (currently just the logo). Uses the first doc.
+const SITE_SETTINGS_QUERY = `*[_type == "siteSettings" && !(_id in path("drafts.**"))][0]{ logo }`
 
 // Convert a product's Sanity image array into ready-to-use CDN URL strings,
 // matching the shape the UI already expects (product.images = [url, ...]).
@@ -49,15 +66,46 @@ function withImageUrls(product) {
   return { ...product, images }
 }
 
-// Fetch the full catalog (products + categories) from Sanity.
-// Returns empty arrays on failure so callers can fall back gracefully.
+// Resolve a hero slide's uploaded image into a wide CDN URL, matching the
+// shape the slideshow expects (slide.img = url).
+function withHeroImageUrl(slide) {
+  const img =
+    slide.image && slide.image.asset
+      ? urlFor(slide.image).width(1920).height(1080).quality(85).auto('format').url()
+      : ''
+  return {
+    id: slide.id,
+    title: slide.title || '',
+    subtitle: slide.subtitle || '',
+    ctaLabel: slide.ctaLabel || '',
+    ctaLink: slide.ctaLink || '',
+    img,
+  }
+}
+
+// Resolve the site logo into a CDN URL, or null if none is set.
+function resolveLogo(settings) {
+  if (settings && settings.logo && settings.logo.asset) {
+    return urlFor(settings.logo).width(360).fit('max').auto('format').url()
+  }
+  return null
+}
+
+// Fetch the full catalog (products + categories + hero slides + settings) from
+// Sanity. Returns empty/falsy values on failure so callers can fall back.
 export async function fetchCatalog() {
-  const [products, categories] = await Promise.all([
+  const [products, categories, heroSlides, settings] = await Promise.all([
     client.fetch(PRODUCTS_QUERY),
     client.fetch(CATEGORIES_QUERY),
+    client.fetch(HERO_SLIDES_QUERY),
+    client.fetch(SITE_SETTINGS_QUERY),
   ])
   return {
     products: Array.isArray(products) ? products.map(withImageUrls) : [],
     categories: Array.isArray(categories) ? categories : [],
+    heroSlides: Array.isArray(heroSlides)
+      ? heroSlides.map(withHeroImageUrl).filter((s) => s.img)
+      : [],
+    logoUrl: resolveLogo(settings),
   }
 }
