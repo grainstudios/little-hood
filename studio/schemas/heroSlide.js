@@ -49,10 +49,10 @@ export default defineType({
         ),
     }),
     defineField({
-      name: 'textColor',
-      title: 'Text colour',
+      name: 'headlineColor',
+      title: 'Headline colour',
       type: 'string',
-      description: 'Colour of the headline and subtitle. Use "Custom" below to enter any other colour.',
+      description: 'Colour of the headline text. Use "Custom" below to enter any other colour.',
       options: {
         list: [
           { title: 'White', value: '#ffffff' },
@@ -74,12 +74,58 @@ export default defineType({
       initialValue: '#ffffff',
     }),
     defineField({
-      name: 'customTextColor',
-      title: 'Custom text colour (hex)',
+      name: 'customHeadlineColor',
+      title: 'Custom headline colour (hex)',
       type: 'string',
       description: 'Optional. Overrides the choice above, e.g. #ff6600.',
       validation: (rule) =>
         rule.regex(/^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/, { name: 'hex colour' }).error('Use a hex value like #ff6600.'),
+    }),
+    defineField({
+      name: 'subtitleColor',
+      title: 'Subtitle colour',
+      type: 'string',
+      description: 'Colour of the subtitle text. Use "Custom" below to enter any other colour.',
+      options: {
+        list: [
+          { title: 'White', value: '#ffffff' },
+          { title: 'Black', value: '#1a1a1a' },
+          { title: 'Cream', value: '#fdf4ed' },
+          { title: 'Beige', value: '#e8dacf' },
+          { title: 'Light brown', value: '#bd8556' },
+          { title: 'Brown', value: '#8b543d' },
+          { title: 'Dark brown', value: '#642f00' },
+          { title: 'Gold', value: '#d4a24c' },
+          { title: 'Charcoal', value: '#2c2d2e' },
+          { title: 'Sage', value: '#9caf88' },
+          { title: 'Blush', value: '#f3a39b' },
+          { title: 'Deep red', value: '#a3282a' },
+          { title: 'Navy', value: '#1f3a5f' },
+          { title: 'Teal', value: '#2f7d78' },
+        ],
+      },
+      initialValue: '#ffffff',
+    }),
+    defineField({
+      name: 'customSubtitleColor',
+      title: 'Custom subtitle colour (hex)',
+      type: 'string',
+      description: 'Optional. Overrides the choice above, e.g. #ff6600.',
+      validation: (rule) =>
+        rule.regex(/^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/, { name: 'hex colour' }).error('Use a hex value like #ff6600.'),
+    }),
+    defineField({
+      name: 'textColor',
+      title: 'Text colour (legacy)',
+      type: 'string',
+      description: 'Old shared colour field, kept only for slides created before separate headline/subtitle colours existed.',
+      hidden: true,
+    }),
+    defineField({
+      name: 'customTextColor',
+      title: 'Custom text colour (legacy)',
+      type: 'string',
+      hidden: true,
     }),
     defineField({
       name: 'fontFamily',
@@ -102,6 +148,21 @@ export default defineType({
     defineField({
       name: 'headlineSize',
       title: 'Headline size',
+      type: 'string',
+      options: {
+        list: [
+          { title: 'Small', value: 'small' },
+          { title: 'Medium', value: 'medium' },
+          { title: 'Large', value: 'large' },
+          { title: 'Extra large', value: 'xlarge' },
+        ],
+        layout: 'radio',
+      },
+      initialValue: 'medium',
+    }),
+    defineField({
+      name: 'subtitleSize',
+      title: 'Subtitle size',
       type: 'string',
       options: {
         list: [

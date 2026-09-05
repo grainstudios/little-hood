@@ -54,6 +54,13 @@ const heroHeadlineSizes = {
   xlarge: 'clamp(44px, 8.5vw, 84px)',
 }
 
+const heroSubtitleSizes = {
+  small: 'clamp(11px, 1.6vw, 13px)',
+  medium: 'clamp(13px, 1.8vw, 15px)',
+  large: 'clamp(15px, 2.2vw, 19px)',
+  xlarge: 'clamp(17px, 2.6vw, 23px)',
+}
+
 const heroAlignClasses = {
   left: 'justify-start text-left',
   center: 'justify-center text-center',
@@ -289,9 +296,11 @@ export default function LandingPage() {
         alt: s.title || 'The Little Hood',
         title: s.title,
         subtitle: s.subtitle,
-        textColor: s.textColor || '#ffffff',
+        headlineColor: s.headlineColor || '#ffffff',
+        subtitleColor: s.subtitleColor || '#ffffff',
         fontFamily: s.fontFamily || '',
         headlineSize: s.headlineSize || 'medium',
+        subtitleSize: s.subtitleSize || 'medium',
         textAlign: s.textAlign || 'center',
         textShadow: s.textShadow !== false,
         overlayOpacity: typeof s.overlayOpacity === 'number' ? s.overlayOpacity : 30,
@@ -309,9 +318,11 @@ export default function LandingPage() {
           alt: p.name,
           title: h.title,
           subtitle: h.subtitle,
-          textColor: '#ffffff',
+          headlineColor: '#ffffff',
+          subtitleColor: '#ffffff',
           fontFamily: '',
           headlineSize: 'medium',
+          subtitleSize: 'medium',
           textAlign: 'center',
           textShadow: true,
           overlayOpacity: 30,
@@ -353,9 +364,11 @@ export default function LandingPage() {
       subtitle: '',
       cta: 'Shop Now',
       link: '#best-sellers',
-      textColor: '#ffffff',
+      headlineColor: '#ffffff',
+      subtitleColor: '#ffffff',
       fontFamily: '',
       headlineSize: 'medium',
+      subtitleSize: 'medium',
       textAlign: 'center',
       textShadow: true,
       overlayOpacity: 30,
@@ -617,17 +630,25 @@ export default function LandingPage() {
                 transition={{ duration: 0.6, delay: 0.2 }}
                 className="max-w-[600px]"
                 style={{
-                  color: currentHero.textColor,
                   fontFamily: currentHero.fontFamily || undefined,
                   textShadow: currentHero.textShadow ? '0 2px 12px rgba(0,0,0,0.45)' : 'none',
                 }}
               >
-                <p className="text-[13px] md:text-[15px] uppercase tracking-[3px] mb-3 font-body opacity-90">
+                <p
+                  className="uppercase tracking-[3px] mb-3 font-body opacity-90"
+                  style={{
+                    fontSize: heroSubtitleSizes[currentHero.subtitleSize] || heroSubtitleSizes.medium,
+                    color: currentHero.subtitleColor,
+                  }}
+                >
                   {currentHero.subtitle}
                 </p>
                 <h1
                   className={`${currentHero.fontFamily ? '' : 'font-heading'} font-bold leading-tight mb-6`}
-                  style={{ fontSize: heroHeadlineSizes[currentHero.headlineSize] || heroHeadlineSizes.medium }}
+                  style={{
+                    fontSize: heroHeadlineSizes[currentHero.headlineSize] || heroHeadlineSizes.medium,
+                    color: currentHero.headlineColor,
+                  }}
                 >
                   {currentHero.title}
                 </h1>

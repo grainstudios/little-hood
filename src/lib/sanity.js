@@ -53,10 +53,15 @@ const HERO_SLIDES_QUERY = `*[_type == "heroSlide" && !(_id in path("drafts.**"))
     backgroundType,
     image,
     "video": video.asset->url,
+    headlineColor,
+    customHeadlineColor,
+    subtitleColor,
+    customSubtitleColor,
     textColor,
     customTextColor,
     fontFamily,
     headlineSize,
+    subtitleSize,
     textAlign,
     textShadow,
     overlayOpacity
@@ -93,9 +98,12 @@ function withHeroImageUrl(slide) {
     // Treat missing backgroundType as "video" when a video is present, so
     // slides created before the Image/Video toggle existed still play.
     video: slide.video && slide.backgroundType !== 'image' ? slide.video : '',
-    textColor: slide.customTextColor || slide.textColor || '#ffffff',
+    // Legacy slides only have `textColor`; new slides set headline/subtitle separately.
+    headlineColor: slide.customHeadlineColor || slide.headlineColor || slide.customTextColor || slide.textColor || '#ffffff',
+    subtitleColor: slide.customSubtitleColor || slide.subtitleColor || slide.customTextColor || slide.textColor || '#ffffff',
     fontFamily: slide.fontFamily && slide.fontFamily !== 'default' ? slide.fontFamily : '',
     headlineSize: slide.headlineSize || 'medium',
+    subtitleSize: slide.subtitleSize || 'medium',
     textAlign: slide.textAlign || 'center',
     textShadow: slide.textShadow !== false,
     overlayOpacity: typeof slide.overlayOpacity === 'number' ? slide.overlayOpacity : 30,
