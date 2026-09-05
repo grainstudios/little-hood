@@ -32,6 +32,7 @@ const PRODUCTS_QUERY = `*[_type == "product" && !(_id in path("drafts.**")) && a
     images,
     "video": video.asset->url,
     bestSeller,
+    outOfStock,
     "createdAt": _createdAt
   }`
 
@@ -49,7 +50,16 @@ const HERO_SLIDES_QUERY = `*[_type == "heroSlide" && !(_id in path("drafts.**"))
     subtitle,
     ctaLabel,
     ctaLink,
-    image
+    backgroundType,
+    image,
+    "video": video.asset->url,
+    textColor,
+    customTextColor,
+    fontFamily,
+    headlineSize,
+    textAlign,
+    textShadow,
+    overlayOpacity
   }`
 
 // GROQ: global site settings (currently just the logo). Uses the first doc.
@@ -80,6 +90,15 @@ function withHeroImageUrl(slide) {
     ctaLabel: slide.ctaLabel || '',
     ctaLink: slide.ctaLink || '',
     img,
+    // Treat missing backgroundType as "video" when a video is present, so
+    // slides created before the Image/Video toggle existed still play.
+    video: slide.video && slide.backgroundType !== 'image' ? slide.video : '',
+    textColor: slide.customTextColor || slide.textColor || '#ffffff',
+    fontFamily: slide.fontFamily && slide.fontFamily !== 'default' ? slide.fontFamily : '',
+    headlineSize: slide.headlineSize || 'medium',
+    textAlign: slide.textAlign || 'center',
+    textShadow: slide.textShadow !== false,
+    overlayOpacity: typeof slide.overlayOpacity === 'number' ? slide.overlayOpacity : 30,
   }
 }
 
@@ -104,7 +123,7 @@ export async function fetchCatalog() {
     products: Array.isArray(products) ? products.map(withImageUrls) : [],
     categories: Array.isArray(categories) ? categories : [],
     heroSlides: Array.isArray(heroSlides)
-      ? heroSlides.map(withHeroImageUrl).filter((s) => s.img)
+      ? heroSlides.map(withHeroImageUrl).filter((s) => s.img || s.video)
       : [],
     logoUrl: resolveLogo(settings),
   }

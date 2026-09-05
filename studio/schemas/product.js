@@ -1,4 +1,5 @@
 import { defineField, defineType } from 'sanity'
+import VideoInput from '../components/VideoInput'
 
 export default defineType({
   name: 'product',
@@ -56,6 +57,7 @@ export default defineType({
       description:
         'Upload a short product video (MP4/WebM). It appears alongside the photos on the product page.',
       options: { accept: 'video/*' },
+      components: { input: VideoInput },
     }),
     defineField({
       name: 'bestSeller',
@@ -78,6 +80,13 @@ export default defineType({
       type: 'boolean',
       description: 'Turn off to hide this product without deleting it.',
       initialValue: true,
+    }),
+    defineField({
+      name: 'outOfStock',
+      title: 'Out of stock',
+      type: 'boolean',
+      description: 'Turn this on to mark the product as unavailable while still keeping it visible in the catalog.',
+      initialValue: false,
     }),
   ],
   orderings: [

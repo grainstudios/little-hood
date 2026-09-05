@@ -1,4 +1,5 @@
 import { defineField, defineType } from 'sanity'
+import VideoInput from '../components/VideoInput'
 
 export default defineType({
   name: 'heroSlide',
@@ -8,12 +9,139 @@ export default defineType({
     'Big rotating banners at the top of the landing page. Upload your own photo and write the headline + subtitle that appears over it.',
   fields: [
     defineField({
+      name: 'backgroundType',
+      title: 'Background',
+      type: 'string',
+      description: 'Choose whether this slide shows a photo or a video.',
+      options: {
+        list: [
+          { title: 'Image', value: 'image' },
+          { title: 'Video', value: 'video' },
+        ],
+        layout: 'radio',
+      },
+      initialValue: 'image',
+      validation: (rule) => rule.required(),
+    }),
+    defineField({
       name: 'image',
       title: 'Background image',
       type: 'image',
-      description: 'Shown full-width behind the text. Use a wide, high-resolution photo.',
+      description: 'Wide, high-resolution photo (1920×1080 or larger). Also used as the video poster.',
       options: { hotspot: true },
-      validation: (rule) => rule.required(),
+      hidden: ({ parent }) => parent?.backgroundType === 'video' && Boolean(parent?.video),
+      validation: (rule) =>
+        rule.custom((value, context) =>
+          context.parent?.backgroundType === 'video' || value ? true : 'Add a background image.',
+        ),
+    }),
+    defineField({
+      name: 'video',
+      title: 'Background video',
+      type: 'file',
+      description: 'Short MP4/WebM clip. Plays muted on loop. Keep it small — it autoplays on mobile data too.',
+      options: { accept: 'video/*' },
+      components: { input: VideoInput },
+      hidden: ({ parent }) => parent?.backgroundType !== 'video',
+      validation: (rule) =>
+        rule.custom((value, context) =>
+          context.parent?.backgroundType !== 'video' || value ? true : 'Upload a background video.',
+        ),
+    }),
+    defineField({
+      name: 'textColor',
+      title: 'Text colour',
+      type: 'string',
+      description: 'Colour of the headline and subtitle. Use "Custom" below to enter any other colour.',
+      options: {
+        list: [
+          { title: 'White', value: '#ffffff' },
+          { title: 'Black', value: '#1a1a1a' },
+          { title: 'Cream', value: '#fdf4ed' },
+          { title: 'Beige', value: '#e8dacf' },
+          { title: 'Light brown', value: '#bd8556' },
+          { title: 'Brown', value: '#8b543d' },
+          { title: 'Dark brown', value: '#642f00' },
+          { title: 'Gold', value: '#d4a24c' },
+          { title: 'Charcoal', value: '#2c2d2e' },
+          { title: 'Sage', value: '#9caf88' },
+          { title: 'Blush', value: '#f3a39b' },
+          { title: 'Deep red', value: '#a3282a' },
+          { title: 'Navy', value: '#1f3a5f' },
+          { title: 'Teal', value: '#2f7d78' },
+        ],
+      },
+      initialValue: '#ffffff',
+    }),
+    defineField({
+      name: 'customTextColor',
+      title: 'Custom text colour (hex)',
+      type: 'string',
+      description: 'Optional. Overrides the choice above, e.g. #ff6600.',
+      validation: (rule) =>
+        rule.regex(/^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/, { name: 'hex colour' }).error('Use a hex value like #ff6600.'),
+    }),
+    defineField({
+      name: 'fontFamily',
+      title: 'Font',
+      type: 'string',
+      description: 'Font used for the headline and subtitle.',
+      options: {
+        list: [
+          { title: 'Default (site heading)', value: 'default' },
+          { title: 'Quicksand — rounded', value: "'Quicksand', sans-serif" },
+          { title: 'Plus Jakarta Sans — modern', value: "'Plus Jakarta Sans', sans-serif" },
+          { title: 'Be Vietnam Pro — clean', value: "'Be Vietnam Pro', sans-serif" },
+          { title: 'Playfair Display — elegant serif', value: "'Playfair Display', serif" },
+          { title: 'Bebas Neue — bold condensed', value: "'Bebas Neue', sans-serif" },
+          { title: 'Georgia — classic serif', value: 'Georgia, serif' },
+        ],
+      },
+      initialValue: 'default',
+    }),
+    defineField({
+      name: 'headlineSize',
+      title: 'Headline size',
+      type: 'string',
+      options: {
+        list: [
+          { title: 'Small', value: 'small' },
+          { title: 'Medium', value: 'medium' },
+          { title: 'Large', value: 'large' },
+          { title: 'Extra large', value: 'xlarge' },
+        ],
+        layout: 'radio',
+      },
+      initialValue: 'medium',
+    }),
+    defineField({
+      name: 'textAlign',
+      title: 'Text position',
+      type: 'string',
+      options: {
+        list: [
+          { title: 'Left', value: 'left' },
+          { title: 'Centre', value: 'center' },
+          { title: 'Right', value: 'right' },
+        ],
+        layout: 'radio',
+      },
+      initialValue: 'center',
+    }),
+    defineField({
+      name: 'textShadow',
+      title: 'Text shadow',
+      type: 'boolean',
+      description: 'Adds a soft shadow so text stays readable over busy photos.',
+      initialValue: true,
+    }),
+    defineField({
+      name: 'overlayOpacity',
+      title: 'Background dimming (%)',
+      type: 'number',
+      description: 'How much to darken the photo/video behind the text. 0 = none, 70 = very dark.',
+      initialValue: 30,
+      validation: (rule) => rule.min(0).max(90),
     }),
     defineField({
       name: 'title',

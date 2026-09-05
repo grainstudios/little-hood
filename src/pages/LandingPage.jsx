@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback, useRef, useMemo } from 'react'
 import { Link } from 'react-router-dom'
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion as Motion, AnimatePresence } from 'framer-motion'
 import { formatPrice, whatsappOrderUrl, WHATSAPP_URL } from '../config/site'
 import { useCatalog } from '../context/CatalogContext'
 
@@ -47,6 +47,19 @@ const kenBurnsAnimations = [
   'kenBurns2 10s ease-in-out infinite 2.5s',
 ]
 
+const heroHeadlineSizes = {
+  small: 'clamp(24px, 4.5vw, 40px)',
+  medium: 'clamp(32px, 6vw, 56px)',
+  large: 'clamp(38px, 7vw, 68px)',
+  xlarge: 'clamp(44px, 8.5vw, 84px)',
+}
+
+const heroAlignClasses = {
+  left: 'justify-start text-left',
+  center: 'justify-center text-center',
+  right: 'justify-end text-right',
+}
+
 /* ─── animations ─── */
 const fadeUp = {
   initial: { opacity: 0, y: 30 },
@@ -73,8 +86,10 @@ const WA_LINK = `${WHATSAPP_URL}?text=${encodeURIComponent("Hi! I'm interested i
 
 function ProductCard({ product }) {
   const orderUrl = whatsappOrderUrl(product.name)
+  const isOutOfStock = Boolean(product.outOfStock)
+
   return (
-    <motion.div {...staggerItem} className="product-card group">
+    <Motion.div {...staggerItem} className="product-card group">
       <Link to={`/product/${product.id}`} className="block">
         <div className="relative overflow-hidden rounded-[8px] bg-[#f5f5f5] aspect-square mb-3">
           <img
@@ -88,6 +103,11 @@ function ProductCard({ product }) {
               {product.badge}
             </span>
           )}
+          {isOutOfStock && (
+            <span className="absolute inset-x-2 bottom-2 bg-black/75 text-white text-[10px] font-semibold uppercase tracking-wider px-2 py-1 rounded-full text-center z-10">
+              Out of Stock
+            </span>
+          )}
         </div>
         <h3 className="font-body font-semibold text-[15px] text-body leading-snug mb-1 line-clamp-2">{product.name}</h3>
       </Link>
@@ -97,21 +117,31 @@ function ProductCard({ product }) {
           <span className="text-[#000]/40 text-[13px] line-through">{product.originalPrice}</span>
         )}
       </div>
-      <a
-        href={orderUrl}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="block w-full text-center py-2.5 rounded-pill border border-brown-500 text-brown-950 bg-beige font-semibold text-[14px] hover:bg-brown-500 hover:text-white transition-colors duration-200"
-      >
-        Order on WhatsApp
-      </a>
-    </motion.div>
+      {isOutOfStock ? (
+        <button
+          type="button"
+          disabled
+          className="block w-full text-center py-2.5 rounded-pill border border-[#d1d5db] text-[#6b7280] bg-[#f3f4f6] font-semibold text-[14px] cursor-not-allowed opacity-80"
+        >
+          Out of Stock
+        </button>
+      ) : (
+        <a
+          href={orderUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="block w-full text-center py-2.5 rounded-pill border border-brown-500 text-brown-950 bg-beige font-semibold text-[14px] hover:bg-brown-500 hover:text-white transition-colors duration-200"
+        >
+          Order on WhatsApp
+        </a>
+      )}
+    </Motion.div>
   )
 }
 
 function CategoryCard({ cat }) {
   return (
-    <motion.a {...staggerItem} href={`#cat-${cat.id}`} className="text-center flex-shrink-0 group">
+    <Motion.a {...staggerItem} href={`#cat-${cat.id}`} className="text-center flex-shrink-0 group">
       <div className="relative overflow-hidden rounded-[8px] aspect-square bg-[#f5f5f5] mb-3">
         <img
           src={cat.img}
@@ -121,14 +151,14 @@ function CategoryCard({ cat }) {
         />
       </div>
       <span className="font-body font-medium text-[15px] text-body">{cat.name}</span>
-    </motion.a>
+    </Motion.a>
   )
 }
 
 /* ─── Custom-order mascot — springy character that waves & blinks ─── */
 function CustomOrderMascot() {
   return (
-    <motion.div
+    <Motion.div
       aria-hidden="true"
       initial={{ scale: 0, opacity: 0, y: 18, rotate: -14 }}
       whileInView={{ scale: 1, opacity: 1, y: 0, rotate: 0 }}
@@ -137,7 +167,7 @@ function CustomOrderMascot() {
       className="relative flex-shrink-0 select-none"
     >
       {/* idle bob + subtle wiggle */}
-      <motion.div
+      <Motion.div
         animate={{ y: [0, -5, 0], rotate: [-3, 3, -3] }}
         transition={{ duration: 2.2, repeat: Infinity, ease: 'easeInOut' }}
       >
@@ -148,13 +178,13 @@ function CustomOrderMascot() {
           <path d="M15 33 H5.5" stroke="#fff" strokeWidth="3.4" strokeLinecap="round" />
           <circle cx="5" cy="33" r="3.3" fill="#fff" />
           {/* right arm — waving */}
-          <motion.g
+          <Motion.g
             style={{ transformBox: 'fill-box', transformOrigin: 'left center' }}
             animate={{ rotate: [0, 22, 0, 22, 0] }}
             transition={{ duration: 2.2, repeat: Infinity, ease: 'easeInOut' }}
           >
             <path d="M45 31 L53 26" stroke="#fff" strokeWidth="3.4" strokeLinecap="round" />
-          </motion.g>
+          </Motion.g>
           {/* body */}
           <path d="M14 25 C14 12.5 22.7 6 30 6 C37.3 6 46 12.5 46 25 L46 39 C46 48.5 39.4 53 30 53 C20.6 53 14 48.5 14 39 Z" fill="#fff" stroke="#8b543d" strokeWidth="2.6" />
           {/* antenna */}
@@ -164,7 +194,7 @@ function CustomOrderMascot() {
           <circle cx="21.5" cy="35" r="2.7" fill="#f3a39b" opacity="0.75" />
           <circle cx="38.5" cy="35" r="2.7" fill="#f3a39b" opacity="0.75" />
           {/* eyes — blinking */}
-          <motion.g
+          <Motion.g
             style={{ transformBox: 'fill-box', transformOrigin: 'center' }}
             animate={{ scaleY: [1, 1, 0.12, 1, 1] }}
             transition={{ duration: 3.4, repeat: Infinity, times: [0, 0.85, 0.9, 0.95, 1], ease: 'easeInOut' }}
@@ -173,12 +203,12 @@ function CustomOrderMascot() {
             <circle cx="35" cy="29" r="3.2" fill="#3a2a20" />
             <circle cx="26.1" cy="27.9" r="1.05" fill="#fff" />
             <circle cx="36.1" cy="27.9" r="1.05" fill="#fff" />
-          </motion.g>
+          </Motion.g>
           {/* smile */}
           <path d="M25.5 37 Q30 41 34.5 37" stroke="#3a2a20" strokeWidth="2" strokeLinecap="round" fill="none" />
         </svg>
-      </motion.div>
-    </motion.div>
+      </Motion.div>
+    </Motion.div>
   )
 }
 
@@ -188,7 +218,7 @@ function CustomOrderMascot() {
    button, not as a clickable element itself. ─── */
 function CustomOrderArrow() {
   return (
-    <motion.div
+    <Motion.div
       aria-hidden="true"
       initial={{ opacity: 0, scale: 0.7, y: -10 }}
       whileInView={{ opacity: 1, scale: 1, y: 0 }}
@@ -197,14 +227,14 @@ function CustomOrderArrow() {
       className="hidden md:flex flex-col items-end absolute right-0 bottom-full mb-2 z-20 pointer-events-none"
     >
       {/* plain caption — no background/pill, so it doesn't look clickable */}
-      <motion.span
+      <Motion.span
         animate={{ rotate: [-4, 3, -4] }}
         transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
         className="mb-1 origin-bottom italic font-heading text-white text-[14px] font-semibold whitespace-nowrap"
         style={{ textShadow: '0 1px 4px rgba(0,0,0,0.55)' }}
       >
         Tap the button!
-      </motion.span>
+      </Motion.span>
       {/* short curve landing right on the button's top edge */}
       <svg width="84" height="52" viewBox="0 0 84 52" fill="none" className="overflow-visible">
         <defs>
@@ -212,7 +242,7 @@ function CustomOrderArrow() {
             <path d="M0 0 L10 5 L0 10 z" fill="#fff" />
           </marker>
         </defs>
-        <motion.path
+        <Motion.path
           d="M76 4 C 82 20, 58 26, 40 34 C 28 39, 18 43, 10 48"
           stroke="#fff"
           strokeWidth="3"
@@ -224,7 +254,7 @@ function CustomOrderArrow() {
           transition={{ duration: 0.9, repeat: Infinity, ease: 'linear' }}
         />
       </svg>
-    </motion.div>
+    </Motion.div>
   )
 }
 
@@ -255,9 +285,16 @@ export default function LandingPage() {
     if (cmsHeroSlides && cmsHeroSlides.length) {
       return cmsHeroSlides.map((s) => ({
         img: s.img,
+        video: s.video,
         alt: s.title || 'The Little Hood',
         title: s.title,
         subtitle: s.subtitle,
+        textColor: s.textColor || '#ffffff',
+        fontFamily: s.fontFamily || '',
+        headlineSize: s.headlineSize || 'medium',
+        textAlign: s.textAlign || 'center',
+        textShadow: s.textShadow !== false,
+        overlayOpacity: typeof s.overlayOpacity === 'number' ? s.overlayOpacity : 30,
         cta: s.ctaLabel || 'Shop Now',
         link: s.ctaLink || '#best-sellers',
       }))
@@ -268,9 +305,16 @@ export default function LandingPage() {
         if (!p) return null
         return {
           img: p.images[0],
+          video: '',
           alt: p.name,
           title: h.title,
           subtitle: h.subtitle,
+          textColor: '#ffffff',
+          fontFamily: '',
+          headlineSize: 'medium',
+          textAlign: 'center',
+          textShadow: true,
+          overlayOpacity: 30,
           cta: 'Shop Now',
           link: '#best-sellers',
         }
@@ -301,7 +345,21 @@ export default function LandingPage() {
   // closes over a stale length when the catalog loads.
   const currentHero =
     heroSlides[heroIndex] ||
-    heroSlides[0] || { img: '', alt: '', title: '', subtitle: '', cta: 'Shop Now', link: '#best-sellers' }
+    heroSlides[0] || {
+      img: '',
+      video: '',
+      alt: '',
+      title: '',
+      subtitle: '',
+      cta: 'Shop Now',
+      link: '#best-sellers',
+      textColor: '#ffffff',
+      fontFamily: '',
+      headlineSize: 'medium',
+      textAlign: 'center',
+      textShadow: true,
+      overlayOpacity: 30,
+    }
 
   // Hero auto-slide
   useEffect(() => {
@@ -391,7 +449,7 @@ export default function LandingPage() {
         {/* Search bar */}
         <AnimatePresence>
           {searchOpen && (
-            <motion.div
+            <Motion.div
               initial={{ height: 0, opacity: 0 }}
               animate={{ height: 'auto', opacity: 1 }}
               exit={{ height: 0, opacity: 0 }}
@@ -406,7 +464,7 @@ export default function LandingPage() {
                   autoFocus
                 />
               </div>
-            </motion.div>
+            </Motion.div>
           )}
         </AnimatePresence>
       </header>
@@ -415,14 +473,14 @@ export default function LandingPage() {
       <AnimatePresence>
         {mobileMenuOpen && (
           <>
-            <motion.div
+            <Motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               className="fixed inset-0 bg-black/40 z-[9998]"
               onClick={() => setMobileMenuOpen(false)}
             />
-            <motion.div
+            <Motion.div
               initial={{ x: '-100%' }}
               animate={{ x: 0 }}
               exit={{ x: '-100%' }}
@@ -460,7 +518,7 @@ export default function LandingPage() {
                   Order on WhatsApp
                 </a>
               </div>
-            </motion.div>
+            </Motion.div>
           </>
         )}
       </AnimatePresence>
@@ -478,7 +536,7 @@ export default function LandingPage() {
             }}
           >
             {videoTiles.map((tile, i) => (
-              <motion.a
+              <Motion.a
                 key={tile.id}
                 href={`#cat-${tile.id}`}
                 {...staggerItem}
@@ -501,7 +559,7 @@ export default function LandingPage() {
                 <span className="mt-1.5 text-[11px] md:text-[13px] font-body font-medium text-body/80 group-hover:text-brown-700 transition-colors whitespace-nowrap">
                   {tile.name}
                 </span>
-              </motion.a>
+              </Motion.a>
             ))}
           </div>
         </div>
@@ -511,7 +569,7 @@ export default function LandingPage() {
       <section id="home" className="relative">
         <div className="relative w-full h-[55vh] md:h-[calc(100dvh-100px)] min-h-[340px] md:min-h-[400px]">
           <AnimatePresence mode="wait">
-            <motion.div
+            <Motion.div
               key={heroIndex}
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -519,40 +577,68 @@ export default function LandingPage() {
               transition={{ duration: 0.8, ease: 'easeInOut' }}
               className="absolute inset-0"
             >
-              <img
-                src={currentHero.img}
-                alt={currentHero.alt}
-                className="w-full h-full object-cover"
-              />
+              {currentHero.video ? (
+                <video
+                  src={currentHero.video}
+                  poster={currentHero.img}
+                  autoPlay
+                  muted
+                  loop
+                  playsInline
+                  className="w-full h-full object-cover"
+                />
+              ) : (
+                <img
+                  src={currentHero.img}
+                  alt={currentHero.alt}
+                  className="w-full h-full object-cover"
+                />
+              )}
               {/* Overlay */}
-              <div className="absolute inset-0 bg-black/30" />
-            </motion.div>
+              <div
+                className="absolute inset-0"
+                style={{ backgroundColor: `rgba(0,0,0,${(currentHero.overlayOpacity ?? 30) / 100})` }}
+              />
+            </Motion.div>
           </AnimatePresence>
 
           {/* Slide content */}
-          <div className="absolute inset-0 flex items-center justify-center z-10">
+          <div
+            className={`absolute inset-0 flex items-center px-4 md:px-12 z-10 ${
+              heroAlignClasses[currentHero.textAlign] || heroAlignClasses.center
+            }`}
+          >
             <AnimatePresence mode="wait">
-              <motion.div
+              <Motion.div
                 key={heroIndex}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -20 }}
                 transition={{ duration: 0.6, delay: 0.2 }}
-                className="text-center text-white px-4 max-w-[600px]"
+                className="max-w-[600px]"
+                style={{
+                  color: currentHero.textColor,
+                  fontFamily: currentHero.fontFamily || undefined,
+                  textShadow: currentHero.textShadow ? '0 2px 12px rgba(0,0,0,0.45)' : 'none',
+                }}
               >
                 <p className="text-[13px] md:text-[15px] uppercase tracking-[3px] mb-3 font-body opacity-90">
                   {currentHero.subtitle}
                 </p>
-                <h1 className="font-heading text-[36px] md:text-[56px] lg:text-[64px] font-bold leading-tight mb-6">
+                <h1
+                  className={`${currentHero.fontFamily ? '' : 'font-heading'} font-bold leading-tight mb-6`}
+                  style={{ fontSize: heroHeadlineSizes[currentHero.headlineSize] || heroHeadlineSizes.medium }}
+                >
                   {currentHero.title}
                 </h1>
                 <a
                   href={currentHero.link || '#best-sellers'}
                   className="inline-block px-8 py-3 bg-white text-body font-semibold text-[15px] rounded-pill hover:bg-brown-700 hover:text-white transition-colors duration-200"
+                  style={{ textShadow: 'none' }}
                 >
                   {currentHero.cta}
                 </a>
-              </motion.div>
+              </Motion.div>
             </AnimatePresence>
           </div>
         </div>
@@ -577,38 +663,38 @@ export default function LandingPage() {
       {/* ─── Categories ─── */}
       <section className="py-8 md:py-12">
         <div className="max-w-[1280px] mx-auto px-4 md:px-12">
-          <motion.h2 {...fadeUp} className="font-heading text-center text-[24px] md:text-[32px] text-dark mb-6 md:mb-8">
+          <Motion.h2 {...fadeUp} className="font-heading text-center text-[24px] md:text-[32px] text-dark mb-6 md:mb-8">
             Shop by Category
-          </motion.h2>
-          <motion.div {...staggerContainer} className="grid grid-cols-3 md:grid-cols-6 gap-3 md:gap-5">
+          </Motion.h2>
+          <Motion.div {...staggerContainer} className="grid grid-cols-3 md:grid-cols-6 gap-3 md:gap-5">
             {categoryTiles.map((cat) => (
               <CategoryCard key={cat.id} cat={cat} />
             ))}
-          </motion.div>
+          </Motion.div>
         </div>
       </section>
 
       {/* ─── Best Sellers ─── */}
       <section id="best-sellers" className="py-8 md:py-16 bg-white">
         <div className="max-w-[1280px] mx-auto px-4 md:px-12">
-          <motion.h2 {...fadeUp} className="font-heading text-center text-[24px] md:text-[32px] text-dark mb-2">
+          <Motion.h2 {...fadeUp} className="font-heading text-center text-[24px] md:text-[32px] text-dark mb-2">
             Best Sellers
-          </motion.h2>
-          <motion.p {...fadeUp} className="text-center text-body/70 text-[15px] mb-8 md:mb-10 font-body">
+          </Motion.h2>
+          <Motion.p {...fadeUp} className="text-center text-body/70 text-[15px] mb-8 md:mb-10 font-body">
             Our most loved 3D printed creations
-          </motion.p>
-          <motion.div {...staggerContainer} className="grid grid-cols-2 md:grid-cols-4 gap-x-3 gap-y-6 md:gap-x-5 md:gap-y-8">
+          </Motion.p>
+          <Motion.div {...staggerContainer} className="grid grid-cols-2 md:grid-cols-4 gap-x-3 gap-y-6 md:gap-x-5 md:gap-y-8">
             {bestSellers.map((p, i) => (
               <ProductCard key={p.name + i} product={p} />
             ))}
-          </motion.div>
+          </Motion.div>
         </div>
       </section>
 
       {/* ─── Promotional Banner ─── */}
       <section className="py-8 md:py-12">
         <div className="max-w-[1280px] mx-auto px-4 md:px-12">
-          <motion.div {...fadeUp} className="relative overflow-hidden rounded-[16px]">
+          <Motion.div {...fadeUp} className="relative overflow-hidden rounded-[16px]">
             <img
               src="/assets/products/clock-e-mon/2.webp"
               alt="Custom 3D Printing"
@@ -625,7 +711,7 @@ export default function LandingPage() {
                 <div className="flex items-center gap-3 mt-0 md:mt-16">
                   <div className="relative inline-flex">
                     {/* pulsing attention ring behind the button */}
-                    <motion.span
+                    <Motion.span
                       aria-hidden="true"
                       className="absolute inset-0 rounded-pill bg-white/40"
                       animate={{ scale: [1, 1.35, 1], opacity: [0.6, 0, 0.6] }}
@@ -647,50 +733,50 @@ export default function LandingPage() {
                 </div>
               </div>
             </div>
-          </motion.div>
+          </Motion.div>
         </div>
       </section>
 
       {/* ─── New Arrivals ─── */}
       <section id="new-arrivals" className="py-8 md:py-16">
         <div className="max-w-[1280px] mx-auto px-4 md:px-12">
-          <motion.h2 {...fadeUp} className="font-heading text-center text-[24px] md:text-[32px] text-dark mb-2">
+          <Motion.h2 {...fadeUp} className="font-heading text-center text-[24px] md:text-[32px] text-dark mb-2">
             New Arrivals
-          </motion.h2>
-          <motion.p {...fadeUp} className="text-center text-body/70 text-[15px] mb-8 md:mb-10 font-body">
+          </Motion.h2>
+          <Motion.p {...fadeUp} className="text-center text-body/70 text-[15px] mb-8 md:mb-10 font-body">
             Fresh from the print bed — just for you
-          </motion.p>
-          <motion.div {...staggerContainer} className="grid grid-cols-2 md:grid-cols-4 gap-x-3 gap-y-6 md:gap-x-5 md:gap-y-8">
+          </Motion.p>
+          <Motion.div {...staggerContainer} className="grid grid-cols-2 md:grid-cols-4 gap-x-3 gap-y-6 md:gap-x-5 md:gap-y-8">
             {newArrivals.map((p, i) => (
               <ProductCard key={p.name + i} product={p} />
             ))}
-          </motion.div>
+          </Motion.div>
         </div>
       </section>
 
       {/* ─── Full Catalog by Category ─── */}
       <section id="shop" className="py-8 md:py-16 bg-white">
         <div className="max-w-[1280px] mx-auto px-4 md:px-12">
-          <motion.h2 {...fadeUp} className="font-heading text-center text-[24px] md:text-[32px] text-dark mb-2">
+          <Motion.h2 {...fadeUp} className="font-heading text-center text-[24px] md:text-[32px] text-dark mb-2">
             Our Full Collection
-          </motion.h2>
-          <motion.p {...fadeUp} className="text-center text-body/70 text-[15px] mb-8 md:mb-12 font-body">
+          </Motion.h2>
+          <Motion.p {...fadeUp} className="text-center text-body/70 text-[15px] mb-8 md:mb-12 font-body">
             Browse everything we make — order any piece directly on WhatsApp
-          </motion.p>
+          </Motion.p>
 
           {catList.map((cat) => {
             const items = getProductsByCategory(cat.id)
             if (!items.length) return null
             return (
               <div key={cat.id} id={`cat-${cat.id}`} className="mb-12 md:mb-16 scroll-mt-24">
-                <motion.h3 {...fadeUp} className="font-heading text-[20px] md:text-[26px] text-dark mb-5 md:mb-7 pb-2 border-b border-brown-100">
+                <Motion.h3 {...fadeUp} className="font-heading text-[20px] md:text-[26px] text-dark mb-5 md:mb-7 pb-2 border-b border-brown-100">
                   {cat.name}
-                </motion.h3>
-                <motion.div {...staggerContainer} className="grid grid-cols-2 md:grid-cols-4 gap-x-3 gap-y-6 md:gap-x-5 md:gap-y-8">
+                </Motion.h3>
+                <Motion.div {...staggerContainer} className="grid grid-cols-2 md:grid-cols-4 gap-x-3 gap-y-6 md:gap-x-5 md:gap-y-8">
                   {items.map((p) => (
                     <ProductCard key={p.id} product={p} />
                   ))}
-                </motion.div>
+                </Motion.div>
               </div>
             )
           })}
@@ -700,7 +786,7 @@ export default function LandingPage() {
       {/* ─── About / Behind the Scenes ─── */}
       <section id="custom-prints" className="py-8 md:py-16 bg-cream/50">
         <div className="max-w-[1280px] mx-auto px-4 md:px-12">
-          <motion.div {...fadeUp} className="grid md:grid-cols-2 gap-6 md:gap-12 items-center">
+          <Motion.div {...fadeUp} className="grid md:grid-cols-2 gap-6 md:gap-12 items-center">
             <div className="grid grid-cols-2 gap-3">
               <div className="overflow-hidden rounded-[16px] aspect-[3/4]">
                 <img src="/assets/workshop.jpg" alt="Our Workshop" className="w-full h-full object-cover" loading="lazy"
@@ -733,19 +819,19 @@ export default function LandingPage() {
                 Talk to Us
               </a>
             </div>
-          </motion.div>
+          </Motion.div>
         </div>
       </section>
 
       {/* ─── Reviews ─── */}
       <section className="py-8 md:py-16">
         <div className="max-w-[1280px] mx-auto px-4 md:px-12">
-          <motion.h2 {...fadeUp} className="font-heading text-center text-[24px] md:text-[32px] text-dark mb-8 md:mb-10">
+          <Motion.h2 {...fadeUp} className="font-heading text-center text-[24px] md:text-[32px] text-dark mb-8 md:mb-10">
             What Our Customers Say
-          </motion.h2>
-          <motion.div {...staggerContainer} className="grid md:grid-cols-3 gap-4 md:gap-6">
+          </Motion.h2>
+          <Motion.div {...staggerContainer} className="grid md:grid-cols-3 gap-4 md:gap-6">
             {reviews.map((r, i) => (
-              <motion.div
+              <Motion.div
                 key={i}
                 {...staggerItem}
                 className="bg-white border border-brown-100 rounded-[16px] p-5 md:p-6 shadow-[0_2px_8px_rgba(0,0,0,0.04)]"
@@ -762,16 +848,16 @@ export default function LandingPage() {
                   <p className="font-semibold text-[14px] text-dark font-body">{r.name}</p>
                   <p className="text-[12px] text-brown-700 font-body">{r.product}</p>
                 </div>
-              </motion.div>
+              </Motion.div>
             ))}
-          </motion.div>
+          </Motion.div>
         </div>
       </section>
 
       {/* ─── Newsletter ─── */}
       <section className="py-10 md:py-16 bg-brown-700">
         <div className="max-w-[600px] mx-auto px-4 md:px-12 text-center">
-          <motion.div {...fadeUp}>
+          <Motion.div {...fadeUp}>
             <h2 className="font-heading text-[24px] md:text-[32px] text-white mb-2">Stay in the Loop</h2>
             <p className="text-white/80 text-[15px] mb-6 font-body">
               Get notified about new prints, special offers, and behind-the-scenes updates.
@@ -789,7 +875,7 @@ export default function LandingPage() {
                 Subscribe
               </button>
             </form>
-          </motion.div>
+          </Motion.div>
         </div>
       </section>
 
