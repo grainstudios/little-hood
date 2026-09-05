@@ -177,24 +177,35 @@ export default defineType({
     }),
     defineField({
       name: 'textAlign',
-      title: 'Text box position',
+      title: 'Text box position (legacy)',
       type: 'string',
-      description: 'Where the headline/subtitle block sits on the slide (left, centre, or right).',
+      hidden: true,
+    }),
+    defineField({
+      name: 'headlinePosition',
+      title: 'Headline position',
+      type: 'string',
+      description: 'Where the headline sits on the slide, independent of the subtitle.',
       options: {
         list: [
-          { title: 'Left', value: 'left' },
-          { title: 'Centre', value: 'center' },
-          { title: 'Right', value: 'right' },
+          { title: 'Top left', value: 'top-left' },
+          { title: 'Top centre', value: 'top-center' },
+          { title: 'Top right', value: 'top-right' },
+          { title: 'Middle left', value: 'middle-left' },
+          { title: 'Middle centre', value: 'middle-center' },
+          { title: 'Middle right', value: 'middle-right' },
+          { title: 'Bottom left', value: 'bottom-left' },
+          { title: 'Bottom centre', value: 'bottom-center' },
+          { title: 'Bottom right', value: 'bottom-right' },
         ],
-        layout: 'radio',
       },
-      initialValue: 'center',
+      initialValue: 'middle-center',
     }),
     defineField({
       name: 'headlineAlign',
       title: 'Headline text alignment',
       type: 'string',
-      description: 'How the headline text itself is aligned within the block.',
+      description: 'How the headline text itself is aligned within its own position.',
       options: {
         list: [
           { title: 'Left', value: 'left' },
@@ -206,10 +217,30 @@ export default defineType({
       initialValue: 'center',
     }),
     defineField({
+      name: 'subtitlePosition',
+      title: 'Subtitle position',
+      type: 'string',
+      description: 'Where the subtitle sits on the slide, independent of the headline.',
+      options: {
+        list: [
+          { title: 'Top left', value: 'top-left' },
+          { title: 'Top centre', value: 'top-center' },
+          { title: 'Top right', value: 'top-right' },
+          { title: 'Middle left', value: 'middle-left' },
+          { title: 'Middle centre', value: 'middle-center' },
+          { title: 'Middle right', value: 'middle-right' },
+          { title: 'Bottom left', value: 'bottom-left' },
+          { title: 'Bottom centre', value: 'bottom-center' },
+          { title: 'Bottom right', value: 'bottom-right' },
+        ],
+      },
+      initialValue: 'middle-center',
+    }),
+    defineField({
       name: 'subtitleAlign',
       title: 'Subtitle text alignment',
       type: 'string',
-      description: 'How the subtitle text itself is aligned within the block.',
+      description: 'How the subtitle text itself is aligned within its own position.',
       options: {
         list: [
           { title: 'Left', value: 'left' },

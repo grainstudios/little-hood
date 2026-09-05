@@ -61,10 +61,20 @@ const heroSubtitleSizes = {
   xlarge: 'clamp(17px, 2.6vw, 23px)',
 }
 
-const heroAlignClasses = {
-  left: 'justify-start text-left',
-  center: 'justify-center text-center',
-  right: 'justify-end text-right',
+// 9-point grid: converts a headline/subtitle position value (e.g.
+// "top-left") into an absolutely-positioned box, so the two lines can be
+// placed anywhere on the slide independently of each other.
+function heroBoxClasses(position) {
+  const [vPart, hPart] = (position || 'middle-center').split('-')
+  const vertical =
+    vPart === 'top' ? 'top-[12%]' : vPart === 'bottom' ? 'bottom-[12%]' : 'top-1/2 -translate-y-1/2'
+  const horizontal =
+    hPart === 'left'
+      ? 'left-[5%] items-start text-left'
+      : hPart === 'right'
+        ? 'right-[5%] items-end text-right'
+        : 'left-1/2 -translate-x-1/2 items-center text-center'
+  return `absolute flex flex-col max-w-[90%] md:max-w-[560px] px-4 md:px-0 ${vertical} ${horizontal}`
 }
 
 /* ─── animations ─── */
@@ -301,8 +311,9 @@ export default function LandingPage() {
         fontFamily: s.fontFamily || '',
         headlineSize: s.headlineSize || 'medium',
         subtitleSize: s.subtitleSize || 'medium',
-        textAlign: s.textAlign || 'center',
+        headlinePosition: s.headlinePosition || 'middle-center',
         headlineAlign: s.headlineAlign || 'center',
+        subtitlePosition: s.subtitlePosition || 'middle-center',
         subtitleAlign: s.subtitleAlign || 'center',
         textShadow: s.textShadow !== false,
         overlayOpacity: typeof s.overlayOpacity === 'number' ? s.overlayOpacity : 30,
@@ -325,8 +336,9 @@ export default function LandingPage() {
           fontFamily: '',
           headlineSize: 'medium',
           subtitleSize: 'medium',
-          textAlign: 'center',
+          headlinePosition: 'middle-center',
           headlineAlign: 'center',
+          subtitlePosition: 'middle-center',
           subtitleAlign: 'center',
           textShadow: true,
           overlayOpacity: 30,
@@ -373,8 +385,9 @@ export default function LandingPage() {
       fontFamily: '',
       headlineSize: 'medium',
       subtitleSize: 'medium',
-      textAlign: 'center',
+      headlinePosition: 'middle-center',
       headlineAlign: 'center',
+      subtitlePosition: 'middle-center',
       subtitleAlign: 'center',
       textShadow: true,
       overlayOpacity: 30,
@@ -621,12 +634,8 @@ export default function LandingPage() {
             </Motion.div>
           </AnimatePresence>
 
-          {/* Slide content */}
-          <div
-            className={`absolute inset-0 flex items-center px-4 md:px-12 z-10 ${
-              heroAlignClasses[currentHero.textAlign] || heroAlignClasses.center
-            }`}
-          >
+          {/* Slide content — headline and subtitle are positioned independently */}
+          <div className="absolute inset-0 z-10">
             <AnimatePresence mode="wait">
               <Motion.div
                 key={heroIndex}
@@ -634,14 +643,14 @@ export default function LandingPage() {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -20 }}
                 transition={{ duration: 0.6, delay: 0.2 }}
-                className="max-w-[600px]"
+                className={heroBoxClasses(currentHero.subtitlePosition)}
                 style={{
                   fontFamily: currentHero.fontFamily || undefined,
                   textShadow: currentHero.textShadow ? '0 2px 12px rgba(0,0,0,0.45)' : 'none',
                 }}
               >
                 <p
-                  className="uppercase tracking-[3px] mb-3 font-body opacity-90"
+                  className="uppercase tracking-[3px] font-body opacity-90"
                   style={{
                     fontSize: heroSubtitleSizes[currentHero.subtitleSize] || heroSubtitleSizes.medium,
                     color: currentHero.subtitleColor,
@@ -650,6 +659,22 @@ export default function LandingPage() {
                 >
                   {currentHero.subtitle}
                 </p>
+              </Motion.div>
+            </AnimatePresence>
+
+            <AnimatePresence mode="wait">
+              <Motion.div
+                key={heroIndex}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                transition={{ duration: 0.6, delay: 0.25 }}
+                className={heroBoxClasses(currentHero.headlinePosition)}
+                style={{
+                  fontFamily: currentHero.fontFamily || undefined,
+                  textShadow: currentHero.textShadow ? '0 2px 12px rgba(0,0,0,0.45)' : 'none',
+                }}
+              >
                 <h1
                   className={`${currentHero.fontFamily ? '' : 'font-heading'} font-bold leading-tight mb-6`}
                   style={{
