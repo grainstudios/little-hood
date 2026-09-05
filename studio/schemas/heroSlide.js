@@ -177,8 +177,39 @@ export default defineType({
     }),
     defineField({
       name: 'textAlign',
-      title: 'Text position',
+      title: 'Text box position',
       type: 'string',
+      description: 'Where the headline/subtitle block sits on the slide (left, centre, or right).',
+      options: {
+        list: [
+          { title: 'Left', value: 'left' },
+          { title: 'Centre', value: 'center' },
+          { title: 'Right', value: 'right' },
+        ],
+        layout: 'radio',
+      },
+      initialValue: 'center',
+    }),
+    defineField({
+      name: 'headlineAlign',
+      title: 'Headline text alignment',
+      type: 'string',
+      description: 'How the headline text itself is aligned within the block.',
+      options: {
+        list: [
+          { title: 'Left', value: 'left' },
+          { title: 'Centre', value: 'center' },
+          { title: 'Right', value: 'right' },
+        ],
+        layout: 'radio',
+      },
+      initialValue: 'center',
+    }),
+    defineField({
+      name: 'subtitleAlign',
+      title: 'Subtitle text alignment',
+      type: 'string',
+      description: 'How the subtitle text itself is aligned within the block.',
       options: {
         list: [
           { title: 'Left', value: 'left' },

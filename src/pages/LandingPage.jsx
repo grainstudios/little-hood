@@ -302,6 +302,8 @@ export default function LandingPage() {
         headlineSize: s.headlineSize || 'medium',
         subtitleSize: s.subtitleSize || 'medium',
         textAlign: s.textAlign || 'center',
+        headlineAlign: s.headlineAlign || 'center',
+        subtitleAlign: s.subtitleAlign || 'center',
         textShadow: s.textShadow !== false,
         overlayOpacity: typeof s.overlayOpacity === 'number' ? s.overlayOpacity : 30,
         cta: s.ctaLabel || 'Shop Now',
@@ -324,6 +326,8 @@ export default function LandingPage() {
           headlineSize: 'medium',
           subtitleSize: 'medium',
           textAlign: 'center',
+          headlineAlign: 'center',
+          subtitleAlign: 'center',
           textShadow: true,
           overlayOpacity: 30,
           cta: 'Shop Now',
@@ -370,6 +374,8 @@ export default function LandingPage() {
       headlineSize: 'medium',
       subtitleSize: 'medium',
       textAlign: 'center',
+      headlineAlign: 'center',
+      subtitleAlign: 'center',
       textShadow: true,
       overlayOpacity: 30,
     }
@@ -639,6 +645,7 @@ export default function LandingPage() {
                   style={{
                     fontSize: heroSubtitleSizes[currentHero.subtitleSize] || heroSubtitleSizes.medium,
                     color: currentHero.subtitleColor,
+                    textAlign: currentHero.subtitleAlign || 'center',
                   }}
                 >
                   {currentHero.subtitle}
@@ -648,6 +655,7 @@ export default function LandingPage() {
                   style={{
                     fontSize: heroHeadlineSizes[currentHero.headlineSize] || heroHeadlineSizes.medium,
                     color: currentHero.headlineColor,
+                    textAlign: currentHero.headlineAlign || 'center',
                   }}
                 >
                   {currentHero.title}

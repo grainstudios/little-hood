@@ -63,6 +63,8 @@ const HERO_SLIDES_QUERY = `*[_type == "heroSlide" && !(_id in path("drafts.**"))
     headlineSize,
     subtitleSize,
     textAlign,
+    headlineAlign,
+    subtitleAlign,
     textShadow,
     overlayOpacity
   }`
@@ -105,6 +107,8 @@ function withHeroImageUrl(slide) {
     headlineSize: slide.headlineSize || 'medium',
     subtitleSize: slide.subtitleSize || 'medium',
     textAlign: slide.textAlign || 'center',
+    headlineAlign: slide.headlineAlign || 'center',
+    subtitleAlign: slide.subtitleAlign || 'center',
     textShadow: slide.textShadow !== false,
     overlayOpacity: typeof slide.overlayOpacity === 'number' ? slide.overlayOpacity : 30,
   }
